@@ -2,3 +2,4 @@ baseURL = 'http://example.org/'
 languageCode = 'ko-kr'
 title = 'paperstar blog'
 theme = 'ananke'
+newContentEditor = "code"
