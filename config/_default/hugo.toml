@@ -3,3 +3,4 @@ languageCode = 'ko-kr'
 title = 'paperstar blog'
 theme = 'ananke'
 newContentEditor = "code"
+enableRobotsTXT = true
