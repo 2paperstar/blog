@@ -1,0 +1,2 @@
+[taxonomyPageList]
+other = "분류가 “{{ .Title }}”인 게시글 목록입니다."
