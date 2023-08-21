@@ -1,5 +1,6 @@
 baseURL = 'http://example.org/'
 languageCode = 'ko-kr'
+defaultContentLanguage = 'ko'
 title = 'paperstar blog'
 theme = 'ananke'
 newContentEditor = "code"
