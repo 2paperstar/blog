@@ -2,7 +2,7 @@
 title: "코드를 안전하게 전달하는 방법"
 date: 2023-08-22T14:00:00+09:00
 tags: [security, FE]
-featured_image: ""
+featured_image: "thumbnail.png"
 description: "프론트엔드 코드를 사용자에게 노출하지 않고서 안전하게 전달하는 방법"
 show_reading_time: true
 toc: true
