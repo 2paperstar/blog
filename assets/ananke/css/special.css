@@ -5,3 +5,7 @@ nav#TableOfContents > * ul {
 nav#TableOfContents > * * li {
   margin-bottom: 0;
 }
+
+pre.mermaid {
+  background-color: unset;
+}
