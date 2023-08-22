@@ -9,3 +9,8 @@ nav#TableOfContents > * * li {
 pre.mermaid {
   background-color: unset;
 }
+
+pre.mermaid, pre {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
