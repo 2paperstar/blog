@@ -221,23 +221,33 @@ https://datatracker.ietf.org/doc/html/rfc6749#autoid-41
 ```mermaid
 sequenceDiagram
   autonumber
-  actor U as User (resource owner)
+  actor O as Resource Owner
+  participant U as User-Agent
   participant C as Client
   participant A as Authorization Server
-  participant R as Resource Server
-  C->>A: Authorization Request<br/>(with Client ID, Redirect URI, Scope)
-  A->>U: Authorization Response<br/>(with Access Token)
-  U->>C: Redirect to Client<br/>(with Access Token)
-  C->>R: Resource Request<br/>(with Access Token)
-  R->>C: Resource Response
+  participant W as Web-Hosted Client Resource
+  C->>U: Start Authorization
+  U->>A: Authorization Request<br/>(with Client ID, Redirect URI, Scope)
+  U->>O: User authenticates
+  U->>A: User authenticates
+  A->>U: Authorization Response<br/>(with Access Token in Fragment)
+  U->>W: Redirection URI without Fragment
+  W->>C: Script
+  U->>U: Execute Script, Get Access Token
+  U->>C: Access Token
 ```
 
-1. Client는 Authorization Server에게 인가를 요청한다.
+1. Client가 User-Agent에 인가 요청 페이지를 띄운다.
+2. User-Agent는 Authorization Server에게 인가를 요청한다.
    이때 Client는 미리 발급 받은 Client ID와 Redirect URI, Scope를 전달한다.
-2. Authorization Server는 사용자에게 인가를 요청한다.
-3. 사용자는 인가를 허용하면 Access Token을 전달한다.
-4. Client는 Access Token을 이용해 리소스에 접근하도록 요청한다.
-5. Resource Server는 리소스를 전달한다.
+3. User-Agent는 사용자에게 인가를 요청한다.
+4. 사용자가 인가 서버에 인증(로그인, 권한 허용)을 한다.
+5. 인가 서버는 인증이 완료되면 Access Token을 Fragment에 담아 전달한다.
+6. User-Agent는 스크립트를 가져오기 위해 Web-Hosted Client Resource에 접근한다.
+   이때 URI의 Fragment는 전달되지 않는다.
+7. 스크립트를 다운로드 받는다.
+8. 스크립트는 Fragment를 이용해 Access Token을 가져온다.
+9. User-Agent는 Access Token을 Client에게 전달한다.
 
 위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Implicit Grant 방식이다.
 클라이언트에서 Access Token을 발급받지 않고,
