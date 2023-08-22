@@ -1,4 +1,9 @@
 [[main]]
 name = 'Tags'
 pageRef = '/tags'
-weight = 10
+weight = 1
+
+[[main]]
+name = 'TIL'
+pageRef = '/categories/til'
+weight = 5
