@@ -164,6 +164,87 @@ sequenceDiagram
 OAuth 2.0을 알고 있는 사람이라면 이전의 OAuth 1.0은 굉장히 복잡하다고 느낄 것이다.
 또한 Access Token이 한번 발급되면 만료가 되지 않는다는 점도 보안에 취약하다고 느낄 수 있다.
 
+## OAuth 2.0 인가 프레임워크
+
+[OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6749)에서는
+TLS를 활용하여 인증 과정을 단순화 하였다. 이전에 없었던 Access Token의 만료 기간도 도입되었다.
+뿐만 아니라 OAuth 1.0에서는 허용할 수 있는 권한을 선택적으로 부여할 수 없었지만
+OAuth 2.0에서는 권한을 선택적으로 부여할 수 있도록 scope가 도입되었다.
+
+이전의 OAuth 1.0과는 호환 되지 않는 방식이며,
+인가라는 목적은 같지만 구현 방식이 완전히 다르다고 보면 된다.
+
+OAuth 2.0에는 여러가지 인증 방식이 존재한다.
+
+### Authorization Code Grant
+
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.1
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as User (resource owner)
+  participant C as Client
+  participant A as Authorization Server
+  participant R as Resource Server
+  C->>A: Authorization Request<br/>(with Client ID, Redirect URI, Scope)
+  A->>U: Authorization Response<br/>(with Authorization Code)
+  U->>C: Redirect to Client<br/>(with Authorization Code)
+  C->>A: Token Request<br/>(with Authorization Code, Client ID, Client Secret)
+  A->>C: Token Response<br/>(with Access Token, Refresh Token)
+  C->>R: Resource Request<br/>(with Access Token)
+  R->>C: Resource Response
+```
+
+1. Client는 Authorization Server에게 인가를 요청한다.
+   이때 Client는 미리 발급 받은 Client ID와 Redirect URI, Scope를 전달한다.
+2. Authorization Server는 사용자에게 인가를 요청한다.
+3. 사용자는 인가를 허용하면 Authorization Code를 전달한다.
+4. Client는 Authorization Code를 이용해 Access Token을 요청한다.
+   이때 Client는 미리 발급 받은 Client ID와 Client Secret을 전달한다.
+5. Authorization Server는 Access Token을 발급한다.
+6. Client는 Access Token을 이용해 리소스에 접근하도록 요청한다.
+7. Resource Server는 리소스를 전달한다.
+
+위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Authorization Code Grant 방식이다.
+유저는 Authorization Code를 클라이언트에 전달하게 되고,
+클라이언트가 인가 서버에 접근하여 Access Token을 발급받는다.
+서버(클라이언트)에서 Access Token을 발급받는 방식이기 때문에
+Access Token이 노출 되지 않는다는 장점이 있다.
+
+### Implicit Grant
+
+https://datatracker.ietf.org/doc/html/rfc6749#autoid-41
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as User (resource owner)
+  participant C as Client
+  participant A as Authorization Server
+  participant R as Resource Server
+  C->>A: Authorization Request<br/>(with Client ID, Redirect URI, Scope)
+  A->>U: Authorization Response<br/>(with Access Token)
+  U->>C: Redirect to Client<br/>(with Access Token)
+  C->>R: Resource Request<br/>(with Access Token)
+  R->>C: Resource Response
+```
+
+1. Client는 Authorization Server에게 인가를 요청한다.
+   이때 Client는 미리 발급 받은 Client ID와 Redirect URI, Scope를 전달한다.
+2. Authorization Server는 사용자에게 인가를 요청한다.
+3. 사용자는 인가를 허용하면 Access Token을 전달한다.
+4. Client는 Access Token을 이용해 리소스에 접근하도록 요청한다.
+5. Resource Server는 리소스를 전달한다.
+
+위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Implicit Grant 방식이다.
+클라이언트에서 Access Token을 발급받지 않고,
+유저에게(User-Agent, 주로 브라우저) 직접 발급받는 방식이다.
+클라이언트(백엔드 서버)없이 빠르게 구현할 수 있지만 Access Token이 노출 될 수 있다는 단점이 있다.
+SPA(Single Page Application)나 Mobile Application에서 사용하기 적합하다.
+
+### Resource Owner Password Credentials Grant
+
 ## 참고
 
 * [OAuth 2.0 인가 프레임워크](https://datatracker.ietf.org/doc/html/rfc6749)
