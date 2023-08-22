@@ -107,6 +107,63 @@ OpenID Connect는 인증(Authentication)을 담당하는 것이다.
 OpenID Connect는 OAuth 2.0 Authorization Framework [RFC6749]를 확장한 것이기 때문에
 인증과 함께 인가도 가능하다.
 
+## OAuth 1.0 프로토콜
+
+OAuth가 등장하기 이전에는 사용자가 자신의 ID와 Password를 다른 서비스에게 전달해야만
+다른 서비스의 리소스에 접근할 수 있었다. (HTTP Basic Authentication[^3])
+
+[^3]:
+    가장 최근의 HTTP Basic Authentication은 RFC7617이다
+    (https://datatracker.ietf.org/doc/html/rfc7617)
+    이전에는 RFC2617이었다. (https://datatracker.ietf.org/doc/html/rfc2617)
+
+하지만 이렇게 되면 사용자의 ID와 Password가 다른 서비스에게 노출되는 문제가 발생한다.
+또한 권한을 선택적으로 부여하지도 못한다.
+
+OAuth와 같은 표준이 있기 이전에는 각 회사들이 자신들만의 인증 방식을 사용했기 때문에
+인증 방식을 사용해야하는 개발자 입장에서는 매우 불편했다.
+
+이런 각 인증방식을 통합하기 위해서 [OAuth 1.0 프로토콜](https://datatracker.ietf.org/doc/html/rfc5849)이 등장했다.
+
+OAuth 1.0 프로토콜은 사용자가 자신의 ID와 Password를 다른 서비스에게 전달하지 않고도
+다른 서비스의 리소스에 접근할 수 있도록 해주는 프로토콜이다[^4]
+
+[^4]:
+    It also provides a process for end-users to authorize third-
+    party access to their server resources without sharing their
+    credentials (typically, a username and password pair), using user-
+    agent redirections.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as User (resource owner)
+  participant C as Consumer (client)
+  participant S as Service Provider (server)
+  C->>S: Temporary Credential Request<br/>(with Consumer Key and Secret)
+  S->>C: Temporary Credential<br/>(Request Token and Secret)
+  C->>U: Redirect to Service Provider<br/>(with Request Token)
+  U->>S: Resource Owner Authorization<br/>(with Request Token)
+  S->>U: Redirect to Consumer<br/>(with Request Token, Verifier)
+  C->>S: Token Request
+  S->>C: Token<br/>(Access Token and Secret)
+  C->>S: Protected Resource Request<br/>(with Access Token)
+```
+
+1. Consumer는 Service Provider에게 임시 자격 증명을 요청한다.
+   이때 Consumer는 미리 발급 받은 Consumer Key와 Consumer Secret을 전달한다.
+2. Service Provider는 임시 자격 증명을 발급한다.
+3. Consumer는 Service Provider에게 임시 자격 증명을 이용해 사용자를 인증하도록 요청한다.
+4. 사용자는 Service Provider에게 사용자 인증을 요청한다.
+5. Service Provider는 사용자 인증을 완료하고 Consumer에게 사용자 인증이 완료되었다고 알린다.
+   이때 Request Token과 Verifier를 전달한다.
+6. Consumer는 Service Provider에게 Access Token을 요청한다.
+7. Service Provider는 Access Token을 발급한다.
+8. Consumer는 Service Provider에게 Access Token을 이용해 리소스에 접근하도록 요청한다.
+
+OAuth 2.0을 알고 있는 사람이라면 이전의 OAuth 1.0은 굉장히 복잡하다고 느낄 것이다.
+또한 Access Token이 한번 발급되면 만료가 되지 않는다는 점도 보안에 취약하다고 느낄 수 있다.
+
 ## 참고
 
 * [OAuth 2.0 인가 프레임워크](https://datatracker.ietf.org/doc/html/rfc6749)
