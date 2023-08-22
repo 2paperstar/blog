@@ -1,4 +1,5 @@
 post_content_classes = "sans-serif"
+custom_css = ["special.css"]
 
 [[ananke_socials]]
 name = "github"

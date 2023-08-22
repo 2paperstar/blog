@@ -1,0 +1,7 @@
+nav#TableOfContents > * ul {
+  padding-left: 1rem;
+}
+
+nav#TableOfContents > * * li {
+  margin-bottom: 0;
+}
