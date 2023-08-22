@@ -15,7 +15,7 @@ OpenID Connect는 OAuth 2.0 프로토콜 위에서 돌아가는 인증 레이어
 [^1]: OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 [RFC6749] protocol.
 (https://openid.net/specs/openid-connect-core-1_0.html#Introduction)
 
-OpenID Connect의 정확한 과정을 이해하기 위해서는
+그렇기 때문에 OpenID Connect의 정확한 과정을 이해하기 위해서는
 [OAuth 2.0 인가 프레임워크(OAuth 2.0 Authorization Framework)](https://datatracker.ietf.org/doc/html/rfc6749)에 대한
 이해가 필수적이다.
 
