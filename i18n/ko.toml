@@ -20,13 +20,13 @@ other = "What's in this {{ .Type }}"
 other = "Related"
 
 [yourName]
-other = "Your Name"
+other = "이름"
 
 [emailAddress]
-other = "Email Address"
+other = "이메일"
 
 [message]
-other = "Message"
+other = "내용"
 
 [emailRequiredNote]
 other = "An email address is required."
@@ -38,12 +38,10 @@ other = "Send"
 other = "분류가 “{{ .Title }}”인 게시글 목록입니다."
 
 [readingTime]
-one = "One minute read"
-other = "{{ .Count }} minutes read"
+other = "읽는데 {{ .Count }}분"
 
 [wordCount]
-one = "One word"
-other = "{{ .Count }} words"
+other = "단어 {{ .Count }}개"
 
 [pageTitle]
 other = "{{ .Name }} page"
