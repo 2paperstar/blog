@@ -12,3 +12,10 @@ url = "https://www.linkedin.com/in/paperstar"
 [[ananke_socials]]
 name = "stackoverflow"
 url = "https://stackoverflow.com/users/22159750"
+
+[[ananke_socials]]
+name = "twitter"
+url = "https://twitter.com/2paperstar"
+
+[[ananke_socials]]
+name = "facebook"
