@@ -1,3 +1,5 @@
+post_content_classes = "sans-serif"
+
 [[ananke_socials]]
 name = "github"
 url = "https://github.com/2paperstar"
