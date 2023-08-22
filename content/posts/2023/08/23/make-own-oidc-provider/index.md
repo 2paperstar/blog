@@ -244,7 +244,7 @@ sequenceDiagram
 4. 사용자가 인가 서버에 인증(로그인, 권한 허용)을 한다.
 5. 인가 서버는 인증이 완료되면 Access Token을 Fragment에 담아 전달한다.
 6. User-Agent는 스크립트를 가져오기 위해 Web-Hosted Client Resource에 접근한다.
-   이때 URI의 Fragment는 전달되지 않는다.
+   이때 URI의 Fragment는 전달되지 않는다. (브라우저는 URI Fragment를 요청에 담지 않는다.)
 7. 스크립트를 다운로드 받는다.
 8. 스크립트는 Fragment를 이용해 Access Token을 가져온다.
 9. User-Agent는 Access Token을 Client에게 전달한다.
