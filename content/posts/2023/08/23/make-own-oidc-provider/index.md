@@ -297,6 +297,49 @@ sequenceDiagram
 클라이언트가 직접 인가의 주체가 되는 방식이다.
 즉, 클라이언트가 자신의 리소스에 접근할 수 있는 권한을 부여받는 방식이다.
 
+### OAuth 2.0 Token
+
+OAuth 2.0에서는 Access Token과 Refresh Token을 발급한다.
+
+#### Access Token
+
+Access Token은 리소스에 접근할 수 있는 권한을 가진 토큰이다.
+Access Token은 유효기간이 존재하며, 만료되면 다시 발급 받아야 한다.
+
+#### Refresh Token
+
+Refresh Token은 Access Token을 발급받을 수 있는 토큰이다.
+Refresh Token의 존재 덕분에 보통 Access Token의 유효기간은 굉장히 짧게 설정 되어있다.
+(서비스마다 다르겠지만 1분처럼 정말 짧을 수도 있고, 보통 30분~1시간을 많이 쓰는 것 같다.)
+
+두 토큰을 정리하면 아래와 같다.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant C as Client
+  participant R as Resource Server
+  participant A as Authorization Server
+  C->>A: Authorization Grant
+  A->>C: Token Response<br/>(with Access Token & Refresh Token)
+  C->>R: Resource Request<br/>(with Access Token)
+  R->>C: Resource
+  C->>R: Resource Request<br/>(with Access Token)
+  R->>C: Invalid Token Error
+  C->>A: Token Request<br/>(with Refresh Token)
+  A->>C: Token Response<br/>(with Access Token, Optional Refresh Token)
+```
+
+1. 클라이언트가 토큰을 요청한다.
+2. Access Token과 Refresh 토큰을 발급한다.
+3. 리소스 서버에 리소스를 요청한다.
+4. 리소스 서버는 Access Token을 확인하고 리소스를 전달한다.
+5. 리소스 서버에 리소스를 요청한다.
+6. Access Token이 만료된 경우 리소스 서버는 에러를 전달한다.
+7. 클라이언트는 Refresh Token을 이용해 Access Token을 요청한다.
+8. Authorization Server는 Access Token을 발급한다.
+   경우에 따라 Refresh Token을 새로 발급할 수도 있다.
+
 ## OpenID Connect
 
 ## 참고
