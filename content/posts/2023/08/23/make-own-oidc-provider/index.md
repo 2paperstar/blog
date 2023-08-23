@@ -357,6 +357,21 @@ OAuth 2.0에서는 Client를 크게 2가지로 나눌 수 있다.
 * **Public Client**는 Client Secret을 가지고 있지 않은 Client이다.
   user-agent-based application(SPA)이나 native application(Mobile Application)이 이에 해당한다.
 
+이러한 클라이언트들은 OAuth 2.0을 사용하기 전에
+Authorization Server에 [등록](https://tools.ietf.org/html/rfc6749#section-2)해야한다.
+등록(registration)하는 자세한 방식은 표준으로 정의하지 않고 있다.
+다만, client type, redirection URIs 등의 정보를 포함하고 있어야고 규정한다.
+
+특정 클라이언트임을 식별하기 위해서 Authorization Server에서
+고유한 문자열인 [Client Identifier](https://tools.ietf.org/html/rfc6749#section-2.2)를 발급한다.
+이는 secret이 아니기 때문에 클라이언트 종류와 무관하게 모두 가지고 있는 값이다.
+
+이와 같이 클라이언트임을 인증하기 위해 [Client Authentication](https://tools.ietf.org/html/rfc6749#section-2.3)을 사용한다.
+이 때는 secret이 사용되기 때문에 Confidential Client에만 해당한다.
+보통 Client ID와 함께 Client Secret을 발급한다.
+이 값들은 HTTP Basic Authentication으로 전달 되거나
+POST body에 application/x-www-form-urlencoded 방식으로 담겨 전달된다.
+
 ## 참고
 
 * [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
@@ -368,3 +383,4 @@ OAuth 2.0에서는 Client를 크게 2가지로 나눌 수 있다.
 * [Google은 Refresh Token을 쉽게 내주지 않는다](https://hyeonic.github.io/woowacourse/dallog/google-refresh-token.html)
 * [OpenID Connect - Google](https://developers.google.com/identity/openid-connect/openid-connect)
 * [OAuth 인증서버 만들기 with(oidc-provider)](https://cozy-ho.github.io/server/2021/07/19/Nodejs%EB%A1%9C-OAuth-%EC%9D%B8%EC%A6%9D%EC%84%9C%EB%B2%84-%EB%A7%8C%EB%93%A4%EA%B8%B0-oidc-provider.html)
+* [OAuth 2.0 - RFC6749 정리](https://chipmaker.tistory.com/entry/OAuth20-%EC%A0%95%EB%A6%AC)
