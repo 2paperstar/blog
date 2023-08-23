@@ -340,6 +340,23 @@ sequenceDiagram
 8. Authorization Server는 Access Token을 발급한다.
    경우에 따라 Refresh Token을 새로 발급할 수도 있다.
 
+### OAuth 2.0 Client
+
+https://datatracker.ietf.org/doc/html/rfc6749#section-2.1
+
+사실 OAuth 2.0을 사용해서 자신의 서비스를 구현하는 것이 목적이라면 여기까지만 알아도 되지만
+OpenID Connect 표준을 만족하는 인증 서버를 구현하기 위해서는
+OAuth 2.0이 정의하고 있는 Client에 대해서도 정확하게 알 필요가 있다.
+
+OAuth 2.0에서는 Client를 크게 2가지로 나눌 수 있다.
+
+* **Confidential Client**는 Client Secret을 가지고 있는 Client이다.
+  이 Client Secret은 기밀성이 보장되어야 한다.
+  즉, Client Secret이 유출되면 안된다.
+  web application이 이에 해당한다.
+* **Public Client**는 Client Secret을 가지고 있지 않은 Client이다.
+  user-agent-based application(SPA)이나 native application(Mobile Application)이 이에 해당한다.
+
 ## OpenID Connect
 
 ## 참고
