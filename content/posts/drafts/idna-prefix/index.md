@@ -7,7 +7,7 @@ description: ""
 draft: true
 ---
 
-[OIDC 제작 관련 글]({{< ref "/posts/2023/08/23/make-own-oidc-provider/index.md" >}})에서
+[OIDC 제작 관련 글]({{< ref "/posts/2023/08/23/make-own-openid-provider-background/index.md" >}})에서
 URI Fragment에 대해 찾아보다가 URL 위키피디아 문서를 보게 되었고,
 그곳에서 언급 된 Internationalized URL을 보다가 IDNA Prefix가 눈에 띄였다.
 (위키의 무서움)
