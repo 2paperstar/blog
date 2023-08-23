@@ -16,7 +16,7 @@ OpenID Connect는 OAuth 2.0 프로토콜 위에서 돌아가는 인증 레이어
 (https://openid.net/specs/openid-connect-core-1_0.html#Introduction)
 
 그렇기 때문에 OpenID Connect의 정확한 과정을 이해하기 위해서는
-[OAuth 2.0 인가 프레임워크(OAuth 2.0 Authorization Framework)](https://datatracker.ietf.org/doc/html/rfc6749)에 대한
+[OAuth 2.0 인가 프레임워크(OAuth 2.0 Authorization Framework)](https://tools.ietf.org/html/rfc6749)에 대한
 이해가 필수적이다.
 
 그전에 공식 스펙, RFC 문서를 읽다보면 인증(Authentication)과 인가(Authorization)에 대한 용어가
@@ -114,8 +114,8 @@ OAuth가 등장하기 이전에는 사용자가 자신의 ID와 Password를 다�
 
 [^3]:
     가장 최근의 HTTP Basic Authentication은 RFC7617이다
-    (https://datatracker.ietf.org/doc/html/rfc7617)
-    이전에는 RFC2617이었다. (https://datatracker.ietf.org/doc/html/rfc2617)
+    (https://tools.ietf.org/html/rfc7617)
+    이전에는 RFC2617이었다. (https://tools.ietf.org/html/rfc2617)
 
 하지만 이렇게 되면 사용자의 ID와 Password가 다른 서비스에게 노출되는 문제가 발생한다.
 또한 권한을 선택적으로 부여하지도 못한다.
@@ -123,7 +123,7 @@ OAuth가 등장하기 이전에는 사용자가 자신의 ID와 Password를 다�
 OAuth와 같은 표준이 있기 이전에는 각 회사들이 자신들만의 인증 방식을 사용했기 때문에
 인증 방식을 사용해야하는 개발자 입장에서는 매우 불편했다.
 
-이런 각 인증방식을 통합하기 위해서 [OAuth 1.0 프로토콜](https://datatracker.ietf.org/doc/html/rfc5849)이 등장했다.
+이런 각 인증방식을 통합하기 위해서 [OAuth 1.0 프로토콜](https://tools.ietf.org/html/rfc5849)이 등장했다.
 
 OAuth 1.0 프로토콜은 사용자가 자신의 ID와 Password를 다른 서비스에게 전달하지 않고도
 다른 서비스의 리소스에 접근할 수 있도록 해주는 프로토콜이다[^4]
@@ -166,7 +166,7 @@ OAuth 2.0을 알고 있는 사람이라면 이전의 OAuth 1.0은 굉장히 복�
 
 ### OAuth 2.0 인가 프레임워크
 
-[OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6749)에서는
+[OAuth 2.0](https://tools.ietf.org/html/rfc6749)에서는
 TLS를 활용하여 인증 과정을 단순화 하였다. 이전에 없었던 Access Token의 만료 기간도 도입되었다.
 뿐만 아니라 OAuth 1.0에서는 허용할 수 있는 권한을 선택적으로 부여할 수 없었지만
 OAuth 2.0에서는 권한을 선택적으로 부여할 수 있도록 scope가 도입되었다.
@@ -178,7 +178,7 @@ OAuth 2.0에는 여러가지 인증 방식이 존재한다.
 
 #### Authorization Code Grant
 
-https://datatracker.ietf.org/doc/html/rfc6749#section-4.1
+https://tools.ietf.org/html/rfc6749#section-4.1
 
 ```mermaid
 sequenceDiagram
@@ -216,7 +216,7 @@ Access Token이 노출 되지 않는다는 장점이 있다.
 
 #### Implicit Grant
 
-https://datatracker.ietf.org/doc/html/rfc6749#section-4.2
+https://tools.ietf.org/html/rfc6749#section-4.2
 
 ```mermaid
 sequenceDiagram
@@ -257,7 +257,7 @@ SPA(Single Page Application)나 Mobile Application에서 사용하기 적합하�
 
 #### Resource Owner Password Credentials Grant
 
-https://datatracker.ietf.org/doc/html/rfc6749#section-4.3
+https://tools.ietf.org/html/rfc6749#section-4.3
 
 ```mermaid
 sequenceDiagram
@@ -279,7 +279,7 @@ sequenceDiagram
 
 #### Client Credentials Grant
 
-https://datatracker.ietf.org/doc/html/rfc6749#section-4.4
+https://tools.ietf.org/html/rfc6749#section-4.4
 
 ```mermaid
 sequenceDiagram
@@ -342,7 +342,7 @@ sequenceDiagram
 
 ### OAuth 2.0 Client
 
-https://datatracker.ietf.org/doc/html/rfc6749#section-2.1
+https://tools.ietf.org/html/rfc6749#section-2.1
 
 사실 OAuth 2.0을 사용해서 자신의 서비스를 구현하는 것이 목적이라면 여기까지만 알아도 되지만
 OpenID Connect 표준을 만족하는 인증 서버를 구현하기 위해서는
@@ -361,8 +361,8 @@ OAuth 2.0에서는 Client를 크게 2가지로 나눌 수 있다.
 
 ## 참고
 
-* [OAuth 2.0 인가 프레임워크](https://datatracker.ietf.org/doc/html/rfc6749)
-* [OAuth 1.0 프로토콜](https://datatracker.ietf.org/doc/html/rfc5849)
+* [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
+* [OAuth 1.0 프로토콜](https://tools.ietf.org/html/rfc5849)
 * [OpenID Connect 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
 * [OAuth란? & OAuth 1 vs OAuth2](https://velog.io/@hyg8702/OAuth%EB%9E%80-OAuth1-vs-OAuth2)
 * [잡 인터뷰 - OAuth 1.0과 OAuth 2.0의 차이점](https://canada-coder.tistory.com/entry/%EC%9E%A1-%EC%9D%B8%ED%84%B0%EB%B7%B0-2-OAuth-10-%EA%B3%BC-OAuth-20%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90)
