@@ -107,7 +107,7 @@ OpenID Connect는 인증(Authentication)을 담당하는 것이다.
 OpenID Connect는 OAuth 2.0 Authorization Framework [RFC6749]를 확장한 것이기 때문에
 인증과 함께 인가도 가능하다.
 
-## OAuth 1.0 프로토콜
+### OAuth 1.0 프로토콜
 
 OAuth가 등장하기 이전에는 사용자가 자신의 ID와 Password를 다른 서비스에게 전달해야만
 다른 서비스의 리소스에 접근할 수 있었다. (HTTP Basic Authentication[^3])
@@ -164,7 +164,7 @@ sequenceDiagram
 OAuth 2.0을 알고 있는 사람이라면 이전의 OAuth 1.0은 굉장히 복잡하다고 느낄 것이다.
 또한 Access Token이 한번 발급되면 만료가 되지 않는다는 점도 보안에 취약하다고 느낄 수 있다.
 
-## OAuth 2.0 인가 프레임워크
+### OAuth 2.0 인가 프레임워크
 
 [OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6749)에서는
 TLS를 활용하여 인증 과정을 단순화 하였다. 이전에 없었던 Access Token의 만료 기간도 도입되었다.
@@ -176,7 +176,7 @@ OAuth 2.0에서는 권한을 선택적으로 부여할 수 있도록 scope가 �
 
 OAuth 2.0에는 여러가지 인증 방식이 존재한다.
 
-### Authorization Code Grant
+#### Authorization Code Grant
 
 https://datatracker.ietf.org/doc/html/rfc6749#section-4.1
 
@@ -214,7 +214,7 @@ sequenceDiagram
 서버(클라이언트)에서 Access Token을 발급받는 방식이기 때문에
 Access Token이 노출 되지 않는다는 장점이 있다.
 
-### Implicit Grant
+#### Implicit Grant
 
 https://datatracker.ietf.org/doc/html/rfc6749#section-4.2
 
@@ -255,7 +255,7 @@ sequenceDiagram
 클라이언트(백엔드 서버)없이 빠르게 구현할 수 있지만 Access Token이 노출 될 수 있다는 단점이 있다.
 SPA(Single Page Application)나 Mobile Application에서 사용하기 적합하다.
 
-### Resource Owner Password Credentials Grant
+#### Resource Owner Password Credentials Grant
 
 https://datatracker.ietf.org/doc/html/rfc6749#section-4.3
 
@@ -277,7 +277,7 @@ sequenceDiagram
 위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Resource Owner Password Credentials Grant 방식이다.
 패스워드가 직접 클라이언트(백엔드)로 넘어가기 때문에 신뢰할 수 있는 클라이언트로 보장 되는 경우에만 사용해야 한다.
 
-### Client Credentials Grant
+#### Client Credentials Grant
 
 https://datatracker.ietf.org/doc/html/rfc6749#section-4.4
 
@@ -296,6 +296,8 @@ sequenceDiagram
 위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Client Credentials Grant 방식이다.
 클라이언트가 직접 인가의 주체가 되는 방식이다.
 즉, 클라이언트가 자신의 리소스에 접근할 수 있는 권한을 부여받는 방식이다.
+
+## OpenID Connect
 
 ## 참고
 
