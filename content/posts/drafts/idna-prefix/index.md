@@ -18,6 +18,6 @@ https://web.archive.org/web/20041208124351/http://www.atm.tut.fi/list-archive/ie
 
 IDNA: Internationalizing Domain Names in Applications
 
-지금은 IDNA prefix로 xn--을 사용하고 있다.
+지금은 IDNA prefix로 xn-\-을 사용하고 있다.
 
 RFC2777에 따라 후보로 정해진 prefix 중에서 하나를 고르게 되었다.
