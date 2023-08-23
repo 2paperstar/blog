@@ -1,7 +1,7 @@
 ---
 title: 'GitHub의 숨은 UX - mail'
 date: 2023-08-23T23:08:30+09:00
-tags: []
+tags: [GitHub, UX]
 categories: [til]
 featured_image: ''
 description: ''
