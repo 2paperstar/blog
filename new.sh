@@ -3,4 +3,9 @@ Y=$(date +%Y)
 M=$(date +%m)
 D=$(date +%d)
 title=$1
-hugo new content posts/$Y/$M/$D/$title/index.md
+if [[ $2 == "draft" ]]; then
+  path="drafts"
+else
+  path="$Y/$M/$D"
+fi
+hugo new content posts/$path/$title/index.md
