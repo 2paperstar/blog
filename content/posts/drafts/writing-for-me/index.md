@@ -2,6 +2,7 @@
 title: "개발자의 글쓰기"
 date: 2023-08-29 23:00:00 +0900
 show_reading_time: true
+draft: true
 ---
 
 ## 글을 쓰기 전
