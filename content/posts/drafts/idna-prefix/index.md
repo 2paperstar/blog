@@ -1,7 +1,7 @@
 ---
 title: "IDNA Prefix에 관한 이야기"
 date: 2023-08-23T18:53:10+09:00
-tags: []
+tags: [IDNA, IANA, URL]
 featured_image: ""
 description: ""
 draft: true
