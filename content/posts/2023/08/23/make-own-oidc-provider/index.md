@@ -277,6 +277,26 @@ sequenceDiagram
 위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Resource Owner Password Credentials Grant 방식이다.
 패스워드가 직접 클라이언트(백엔드)로 넘어가기 때문에 신뢰할 수 있는 클라이언트로 보장 되는 경우에만 사용해야 한다.
 
+### Client Credentials Grant
+
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.4
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant C as Client
+  participant A as Authorization Server
+  C->>A: Token Request<br/>(with Client Credentials)
+  A->>C: Token Response<br/>(with Access Token)
+```
+
+1. Client는 Client Credentials를 이용해 Access Token을 요청한다.
+2. Authorization Server는 Access Token을 발급한다.
+
+위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Client Credentials Grant 방식이다.
+클라이언트가 직접 인가의 주체가 되는 방식이다.
+즉, 클라이언트가 자신의 리소스에 접근할 수 있는 권한을 부여받는 방식이다.
+
 ## 참고
 
 * [OAuth 2.0 인가 프레임워크](https://datatracker.ietf.org/doc/html/rfc6749)
