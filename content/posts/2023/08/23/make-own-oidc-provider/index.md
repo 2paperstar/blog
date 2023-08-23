@@ -372,6 +372,18 @@ Authorization Server에 [등록](https://tools.ietf.org/html/rfc6749#section-2)�
 이 값들은 HTTP Basic Authentication으로 전달 되거나
 POST body에 application/x-www-form-urlencoded 방식으로 담겨 전달된다.
 
+## Redirection URI
+
+https://tools.ietf.org/html/rfc6749#section-3.1.2
+
+Redirection URI는 인가가 완료되면 사용자를 리다이렉트 시킬 URI이다.
+[Registration Requirements](https://tools.ietf.org/html/rfc6749#section-3.1.2.2)에 따르면
+Public Client이거나 Implicit Grant Type를 사용한다면
+Redirection URI는 반드시 등록해야 하며 등록된 URI만 사용할 수 있다.
+
+만약에 이렇게 등록을 하지 않는다면
+[Open Redirectors](https://tools.ietf.org/html/rfc6749#section-10.15) 공격에 취약해진다.
+
 ## 참고
 
 * [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
