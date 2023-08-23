@@ -1,6 +1,6 @@
 ---
 title: "Make Own OIDC Provider - 사전지식"
-date: 2023-08-23T18:53:10+09:00
+date: 2023-08-23T13:20:10+09:00
 tags: [oidc]
 featured_image: "/tags/oidc/logo.png"
 description: "OpenID Connect를 이용한 인증 서버를 만들어보자"
