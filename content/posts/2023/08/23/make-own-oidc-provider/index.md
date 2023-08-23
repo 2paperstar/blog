@@ -216,7 +216,7 @@ Access Token이 노출 되지 않는다는 장점이 있다.
 
 ### Implicit Grant
 
-https://datatracker.ietf.org/doc/html/rfc6749#autoid-41
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.2
 
 ```mermaid
 sequenceDiagram
@@ -256,6 +256,26 @@ sequenceDiagram
 SPA(Single Page Application)나 Mobile Application에서 사용하기 적합하다.
 
 ### Resource Owner Password Credentials Grant
+
+https://datatracker.ietf.org/doc/html/rfc6749#section-4.3
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor O as Resource Owner
+  participant C as Client
+  participant A as Authorization Server
+  O->>C: Resource Owner Credentials
+  C->>A: Token Request<br/>(with Resource Owner Credentials)
+  A->>C: Token Response<br/>(with Access Token,<br/>Optional Refresh Token)
+```
+
+1. Client는 Resource Owner Credentials를 이용해 Access Token을 요청한다.
+2. Authorization Server는 Access Token을 발급한다.
+3. Client는 Access Token을 이용해 리소스에 접근한다.
+
+위는 OAuth 2.0이 지원하는 인증 방식 중 하나인 Resource Owner Password Credentials Grant 방식이다.
+패스워드가 직접 클라이언트(백엔드)로 넘어가기 때문에 신뢰할 수 있는 클라이언트로 보장 되는 경우에만 사용해야 한다.
 
 ## 참고
 
