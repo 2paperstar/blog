@@ -10,7 +10,11 @@ pre.mermaid {
   background-color: unset;
 }
 
-pre.mermaid, pre {
+pre {
   overflow-y: hidden;
   overflow-x: auto;
+}
+
+main article h1.athelas {
+  font-family: sans-serif;
 }
