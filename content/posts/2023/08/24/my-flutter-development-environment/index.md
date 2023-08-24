@@ -241,3 +241,10 @@ Flutter에서 스플래시를 쉽게 구현할 수 있는 패키지이다. Andro
 ```bash
 $ dart run flutter_native_splash:create
 ```
+
+## retrofit
+
+Flutter에서 사용할 API의 목록을 데코레이터와 함수 시그니쳐로만 작성해두면 자동으로 API 호출을 구현해주는
+아주 편리한 라이브러리이다. 원래 Android에서 많이 쓰이던 라이브러리였는데, 그곳에서 영감을 받아
+Dart에서도 사용할 수 있게 만들었다. Dart에서 사용할 수 있는 HTTP 라이브러리인 `dio`와 함께
+쓰인다.
