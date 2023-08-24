@@ -5,6 +5,7 @@ tags: [flutter]
 featured_image: '/tags/flutter/logo.png'
 description: '1년간 플러터를 사용하면서 알게 된 노하우를 풀어요'
 show_reading_time: true
+toc: true
 ---
 
 지금은 **Flutter**를 사용해서 앱 개발에 많이 활용하고 있다. Flutter는 multi-platform framework로
