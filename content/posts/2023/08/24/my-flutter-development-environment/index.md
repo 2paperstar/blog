@@ -248,3 +248,20 @@ Flutter에서 사용할 API의 목록을 데코레이터와 함수 시그니쳐�
 아주 편리한 라이브러리이다. 원래 Android에서 많이 쓰이던 라이브러리였는데, 그곳에서 영감을 받아
 Dart에서도 사용할 수 있게 만들었다. Dart에서 사용할 수 있는 HTTP 라이브러리인 `dio`와 함께
 쓰인다.
+
+## json_serializable, freezed
+
+`retrofit`을 사용하기 위해서는 HTTP 통신에 사용되는 serialized 형태인 JSON과 Dart 객체를
+연결해주어야 한다. 이 때 `json_serializable`이 유용하게 쓰인다. 또한 `freezed`와 함께 쓴다면
+`freezed`가 `==`, `hashCode`, `copyWith` 등을 알아서 구현해주기 때문에 더 편리하다.
+
+`retrofit`과 `json_serializable`을 같이 사용하면 빌드 순서가 꼬이는 문제가 생길 수 있는데,
+`build.yaml`파일에서 `json_serializable`이 먼저 실행 되고 나서 `retrofit`이 실행 되게끔
+우선 순위를 정해줄 수 있다.
+
+```yaml
+global_options:
+  json_serializable:
+    runs_before:
+      - retrofit_generator
+```
