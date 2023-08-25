@@ -567,7 +567,55 @@ hash.update(this.jwtPublicKey.export({ type: 'spki', format: 'der' }));
 this.jwtKeyID = hash.digest('hex');
 ```
 
+```ts
+const idToken = jwt.sign(
+  {
+    nonce: data.nonce,
+    name: `${data.user.firstName} ${data.user.lastName}`,
+    given_name: data.user.firstName,
+    family_name: data.user.lastName,
+    email: data.user.email,
+  },
+  this.jwtPrivateKey,
+  {
+    algorithm: 'RS256',
+    expiresIn,
+    audience: data.client.id,
+    issuer: 'http://localhost:3000',
+    subject: data.user.id.toString(),
+    keyid: this.jwtKeyID,
+  },
+);
+```
+
 id token은 jwt를 사용해서 만들었다.
+
+### userinfo endpoint
+
+https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
+
+API 형태는 GET 메소드를 사용하고, Authorization 헤더에 Bearer 토큰을 넣어서 요청을 보내야한다.
+
+```ts
+// src/oauth/oauth.service.ts
+
+// ...
+async userInfo(accessToken: string) {
+  const data = await this.cacheManager.get<CacheData>(accessToken);
+  if (!data) {
+    throw new BadRequestException('invalid_token');
+  }
+  return {
+    username: data.user.username,
+    email: data.user.email,
+    given_name: data.user.firstName,
+    family_name: data.user.lastName,
+  };
+}
+// ...
+```
+
+### discovery document
 
 ## 마치며
 
@@ -587,3 +635,7 @@ id token은 jwt를 사용해서 만들었다.
 - [OpenID Connect - Google](https://developers.google.com/identity/openid-connect/openid-connect)
 - [OAuth 인증서버 만들기 with(oidc-provider)](https://cozy-ho.github.io/server/2021/07/19/Nodejs%EB%A1%9C-OAuth-%EC%9D%B8%EC%A6%9D%EC%84%9C%EB%B2%84-%EB%A7%8C%EB%93%A4%EA%B8%B0-oidc-provider.html)
 - [OAuth 2.0 - RFC6749 정리](https://chipmaker.tistory.com/entry/OAuth20-%EC%A0%95%EB%A6%AC)
+
+```
+
+```
