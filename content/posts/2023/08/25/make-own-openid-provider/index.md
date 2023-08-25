@@ -29,6 +29,26 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
   - 비밀번호 찾기
   - 탈퇴
 
+## 프로젝트 세팅
+
+[NestJS](https://nestjs.com/)로 한번도 초기 세팅을 하질 않았기에, 이번에 써보기로 하였다.
+
+```bash
+$ npm i -g @nestjs/cli
+$ yarn global add @nestjs/cli  # or yarn
+$ nest new my-own-openid-provider --strict -p yarn  # enable strict, use yarn
+```
+
+## OAuth module
+
+OAuth 관련 로직만 따로 모듈로 분리하여 관리하도록 하였다.
+
+```bash
+$ nest generate module oauth
+$ nest generate controller oauth
+$ nest generate service oauth
+```
+
 ## 참고
 
 - [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
