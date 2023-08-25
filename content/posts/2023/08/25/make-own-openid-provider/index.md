@@ -49,6 +49,45 @@ $ nest generate controller oauth
 $ nest generate service oauth
 ```
 
+### authorize endpoint
+
+따로 프론트엔드를 만들지 않고, HTML Form을 활용하여 간단하게 구현하였다. 렌더러로는 Nest.js 가이드에
+나와있는 hbs ([Handlebars](https://github.com/pillarjs/hbs#readme))엔진을 사용하였다.
+
+```ts
+// src/oauth/oauth.controller.ts
+
+// ...
+@Get('authorize')
+@Render('oauth/authorize')
+authorize() {
+  return {};
+}
+// ...
+```
+
+```html
+<!-- ... -->
+<form action="" method="post">
+  <div>
+    <label>
+      username:
+      <input type="text" name="username" autocomplete="username" />
+    </label>
+  </div>
+  <div>
+    <label>
+      password:
+      <input type="password" name="password" autocomplete="current-password" />
+    </label>
+  </div>
+  <div>
+    <input type="submit" value="continue with OpenID Provider" />
+  </div>
+</form>
+<!-- ... -->
+```
+
 ## 참고
 
 - [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
