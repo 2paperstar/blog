@@ -8,6 +8,20 @@ show_reading_time: true
 toc: true
 ---
 
+## 만들어야 할 것
+
+OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리하면 아래와 같다.
+
+- OAuth 2.0 Authorization Server
+  - authorize endpoint (web)
+  - token endpoint (server)
+  - revoke endpoint (server, [RFC7009](https://datatracker.ietf.org/doc/html/rfc7009))
+- OpenID Connect Provider
+  - [discovery document](https://openid.net/specs/openid-connect-discovery-1_0.html)
+    - jwks_uri
+  - userinfo endpoint
+  - revoke endpoint
+
 ## 참고
 
 - [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
