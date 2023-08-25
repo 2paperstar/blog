@@ -113,7 +113,8 @@ getUserByUsernameAndPassword(username: string, password: string) {
 ## Auth module
 
 로그인 페이지, 유저 정보 페이지들을 담기 위한 모듈을 만들었다. 또한 현재 유저 정보를 저장하기 위해서
-`express-session`을 사용하였다.
+`express-session`을 사용하였다. 또한 HTML 렌더로는 Nest.js 가이드에 나와있는 hbs
+([Handlebars](https://github.com/pillarjs/hbs#readme))엔진을 사용하였다.
 
 ```bash
 $ nest generate module auth
@@ -121,12 +122,15 @@ $ nest generate controller auth
 $ nest generate service auth
 $ yarn add express-session
 $ yarn add @types/express-session -D
+$ yarn add hbs
 ```
 
 ```ts
 // src/main.ts
 
 // ...
+app.setBaseViewsDir(join(__dirname, '..', 'views'));
+app.setViewEngine('hbs');
 app.use(
   session({
     secret: 'secret',
