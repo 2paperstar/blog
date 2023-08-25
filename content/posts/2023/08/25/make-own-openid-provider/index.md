@@ -20,7 +20,6 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
   - [discovery document](https://openid.net/specs/openid-connect-discovery-1_0.html)
     - jwks_uri
   - userinfo endpoint
-  - revoke endpoint
 - 클라이언트 관리 (구현이 표준으로 정의되어있지 않기 때문에 이 글에서는 일부만 구현)
   - 클라이언트 등록
     - redirection URI
@@ -615,7 +614,52 @@ async userInfo(accessToken: string) {
 // ...
 ```
 
+### revoke endpoint
+
+캐시에 저장 되어있는 access token, refresh token을 날리면 된다.
+
 ### discovery document
+
+https://openid.net/specs/openid-connect-discovery-1_0.html
+
+OpenID Connect Provider의 정보를 담고 있는 JSON 파일이다. 이 파일을 통해서 OpenID Connect
+Provider의 정보를 가져올 수 있다. 이 discovery document를 사용하면 사용하는 입장 (Relying Party)에서
+OpenID Connect Provider의 정보를 하드코딩하지 않고도 가져올 수 있기 때문에 유지보수가 쉽다.
+
+```ts
+discovery() {
+  const baseUrl = 'http://localhost:3000';
+  return {
+    issuer: 'http://localhost:3000',
+    authorization_endpoint: `${baseUrl}/oauth/authorize`,
+    token_endpoint: `${baseUrl}/oauth/token`,
+    userinfo_endpoint: `${baseUrl}/oauth/userinfo`,
+    jwks_uri: `${baseUrl}/oauth/certs`,
+    response_types_supported: [
+      'code',
+      'token',
+      'id_token',
+      'code token',
+      'code id_token',
+      'token id_token',
+      'code token id_token',
+    ],
+    subject_types_supported: ['public'],
+    id_token_signing_alg_values_supported: ['RS256'],
+    scopes_supported: ['openid'],
+    token_endpoint_auth_methods_supported: [
+      'client_secret_basic',
+      'client_secret_post',
+    ],
+    claims_supported: ['name', 'email', 'aud', 'exp', 'iat', 'iss', 'sub'],
+    grant_types_supported: [
+      'authorization_code',
+      'refresh_token',
+      'implicit',
+    ],
+  };
+}
+```
 
 ## 마치며
 
