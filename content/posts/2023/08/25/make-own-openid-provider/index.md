@@ -56,8 +56,8 @@ $ nest generate module user
 $ nest generate service user
 ```
 
-그리고 `user.module.ts`에서는 `UserService`를 export 하도록 바꾸고, `app.module.ts`에서
-자동으로 import된 `UserMoudle`은 제거하였다.
+그리고 다른 모듈에서 서비스를 사용하기 위해 `UserModule`에서 `UserService`를 export 하도록
+바꾸었다.
 
 ### repository
 
@@ -122,7 +122,8 @@ getUserByUsernameAndPassword(username: string, password: string) {
 
 로그인 페이지, 유저 정보 페이지들을 담기 위한 모듈을 만들었다. 또한 현재 유저 정보를 저장하기 위해서
 `express-session`을 사용하였다. 또한 HTML 렌더로는 Nest.js 가이드에 나와있는 hbs
-([Handlebars](https://github.com/pillarjs/hbs#readme))엔진을 사용하였다.
+([Handlebars](https://github.com/pillarjs/hbs#readme))엔진을 사용하였다. `AuthModule`에서
+`UserModule`을 사용하기 때문에 `AuthModule`에 있는 `imports`에 `UserModule`을 추가하였다.
 
 ```bash
 $ nest generate module auth
@@ -152,18 +153,18 @@ app.use(
 ### login
 
 우선 로그인 화면을 만들었다. 로그인이 성공하면 세션에 유저 정보를 저장하고, 실패하면 404에러를 반환한다.
-`UserModule`에서 랜덤한 유저를 가져오는 기능을 구현해서 `faker`가 생성한 유저 정보 중 하나를
-표시하도록 하였다.
+`@Render` 데코레이터를 사용하면 `Cannot set headers after they are sent to the client`라는
+에러가 발생하게 되는데 dynamic하게 template rendering을 해서 세션에 유저 정보가 없을 때에는
+렌더링을 하지 않게 막았다.
 
 ```ts
 // src/auth/auth.controller.ts
 @Get('login')
-@Render('auth/login')
 loginPage(@Session() session: Record<string, any>, @Res() res: Response) {
   if (session.user) {
     return res.status(302).redirect('/auth/info');
   }
-  return { sample: this.userService.getRandomUser() };
+  return res.render('auth/login', {});
 }
 
 @Post('login')
@@ -186,8 +187,6 @@ login(
 <!-- views/auth/login.hbs -->
 
 <!-- ... -->
-<div>sample username: {{ sample.username }}</div>
-<div>sample password: {{ sample.password }}</div>
 <form action="" method="post">
   <div>
     <label>
@@ -211,9 +210,6 @@ login(
 ### info
 
 현재 유저 정보를 가져오는 화면을 만들었다. 유저 정보가 없으면 자동으로 로그인 페이지로 이동하게 만든다.
-`@Render` 데코레이터를 사용하면 `Cannot set headers after they are sent to the client`라는
-에러가 발생하게 되는데 dynamic하게 template rendering을 해서 세션에 유저 정보가 없을 때에는
-렌더링을 하지 않게 막았다.
 
 ```ts
 // src/auth/auth.controller.ts
@@ -240,8 +236,8 @@ info(@Session() session: Record<string, any>, @Res() res: Response) {
 
 클라이언트를 관리하기 위한 모듈을 분리하였다. Auth module에서 했던 것과 마찬가지로 등록은 생략하고
 faker를 사용해서 랜덤한 클라이언트를 만들고 OAuth module에서 사용할 수 있게 열어두었다. 마찬가지로
-`AppModule`에서 자동으로 붙은 `imports`는 지워주고, `ClientModule`에서 `ClientService`를
-`exports`에 추가하였다. 여기에서는 클라이언트의 id를 설정하는데에 crypto 모듈을 사용하였다.
+서비스를 다른 모듈에서 사용할 수 있도록 `ClientModule`에서 `ClientService`를 `exports`에
+추가하였다. 여기에서는 클라이언트의 id를 설정하는데에 crypto 모듈을 사용하였다.
 
 ```bash
 $ nest generate module client
@@ -255,6 +251,7 @@ $ nest generate service client
 export class ClientEntity {
   id: string;
   secret: string;
+  redirectUris: string[];
 
   static random() {
     const client = new ClientEntity();
@@ -280,51 +277,155 @@ export class ClientRepository {
 
 ## OAuth module
 
-OAuth 관련 로직만 따로 모듈로 분리하여 관리하도록 하였다.
+OAuth 관련 로직만 따로 모듈로 분리하여 관리하도록 하였다. `OauthModule`에서 `UserModule`과
+`ClientModule`을 사용하기 때문에 `OauthModule`에 있는 `imports`에 `UserModule`과 `ClientModule`을
+추가하였다.
+
+이전에 구현한 모듈들은 OAuth, OpenID Connect의 표준에서 정의된 것이 아니기 때문에 OpenID
+Provider의 성격에 따라서 자유롭게 구현할 수 있지만 적어도 이 모듈에 있는 것들은 표준을 따라야한다.
+그래서 에러 메시지들도 표준과 똑같이 맞추어주었다. OpenID Connect의 스펙만 보더라도 OAuth 2.0의
+내용이 같이 담겨있기 때문에 OpenID Connect를 기준으로 구현하였다. OpenID Connect를 구현할 때에는
+파라미터가 올바른지 확인하는 것이 중요하기 때문에 `Nest.js`에서 제공하는 `class-validator`,
+`class-transformer`를 사용해서 파라미터를 검증하고 변환하도록 하였다.
 
 ```bash
 $ nest generate module oauth
 $ nest generate controller oauth
 $ nest generate service oauth
+$ yarn add class-validator class-transformer
 ```
 
-### authorize endpoint
+### authorize endpoint (authorization code grant)
 
-따로 프론트엔드를 만들지 않고, HTML Form을 활용하여 간단하게 구현하였다. 렌더러로는 Nest.js 가이드에
-나와있는 hbs ([Handlebars](https://github.com/pillarjs/hbs#readme))엔진을 사용하였다.
+https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest
+
+OAuth 2.0 표준에 따라서 필요한 (쿼리) 파라미터들은 4개, 선택적으로 사용할 수 있는 것이 1개 있다.
+추가로 OpenID Connect가 허용하고 있는 것으로는 9개가 더 있다.
+
+- scope(필수): 인가 서버에게 요청하는 권한의 범위를 나타낸다.
+- response_type(필수): 인가 서버에게 요청하는 인가 방식을 나타낸다.
+  (authorization code grant flow에서는 code를 사용할 수 있다.)
+- client_id(필수): 클라이언트를 식별하는 값이다.
+- redirect_uri(필수): 인가가 완료되었을 때 인가 코드를 전달받을 URI이다.
+- state(선택): 인가 요청과 응답을 매핑하기 위한 값이다.
+- response_mode(선택): 인가 응답을 전달받을 방식을 나타낸다.
+  ([query, fragment](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html),
+  [form_post](https://openid.net/specs/oauth-v2-form-post-response-mode-1_0.html)를 사용할 수 있다.)
+- nonce(선택): ID Token을 전달 받을 때 검증을 위한 값이다.
+- display(선택): 인가 페이지를 어떻게 표시할지 나타낸다.
+- prompt(선택): 재인증, 로그인, 동의 등의 행동을 결정한다.
+- max_age(선택): 인증된 상태를 유지할 시간을 나타낸다.
+- ui_locales(선택): 인가 페이지를 어떤 언어로 표시할지 나타낸다.
+- id_token_hint(선택): 이전에 사용한 id token을 전달해서 인증을 빠르게 할 수 있도록 한다.
+- login_hint(선택): 로그인에 사용할 username을 전달해서 인증을 빠르게 할 수 있도록 한다.
+- acr_values(선택): 인증 수준을 나타낸다.
+
+authorize 파라미터에 사용되는 DTO를 validator, transformer와 함께 만들었다. 네이티브 앱을 위한
+클라이언트의 리다이렉션 URI는 자체적인 콜백 스킴을 사용하기 때문에 프로토콜이 https가 아닐 수 있어서
+관련된 옵션을 조절하였다. 각 에러 메시지는 표준과 똑같이 맞추어주었다.
+
+만약에 authorize 엔드포인트를 호출하는 시점에 세션에 유저 정보가 없는 경우 로그인 페이지로 지금 호출한
+url을 리다이렉트 값으로 하여 이동 시키고, 로그인이 완료 됐을 때에는 그 url로 다시 리다이렉트 시키도록
+하였다.
+
+```ts
+// src/oauth/dto/authorize.dto.ts
+
+// ...
+export class AuthorizeDto {
+  @IsString({ message: 'invalid_request' })
+  client_id: string;
+
+  @IsString()
+  @IsUrl(
+    {
+      require_valid_protocol: false,
+      require_tld: false,
+      require_host: false,
+    },
+    { message: 'invalid_request' },
+  )
+  redirect_uri: string;
+
+  @IsString({ message: 'invalid_request' })
+  @IsOptional()
+  nonce?: string;
+
+  @IsArray()
+  @IsEnum(allowedScopes, { each: true, message: 'invalid_scope' })
+  @Transform(({ value }) => value.split(' '))
+  scope: Readonly<Scope[]>;
+
+  @IsArray()
+  @IsEnum(['code'], {
+    each: true,
+    message: 'unsupported_response_type',
+  })
+  @Transform(({ value }) => value.split(' '))
+  response_type: 'code'[];
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+}
+```
 
 ```ts
 // src/oauth/oauth.controller.ts
 
 // ...
 @Get('authorize')
-@Render('oauth/authorize')
-authorize() {
-  return {};
+authorize(
+  @Query() authorizeDto: AuthorizeDto,
+  @Session() session: Record<string, any>,
+  @Req() req: Request,
+  @Res() res: Response,
+) {
+  const client = this.clientService.getClientById(authorizeDto.client_id);
+  if (!client) {
+    throw new BadRequestException('invalid_client');
+  }
+  const user = session.user;
+  if (!user) {
+    return res
+      .status(302)
+      .redirect(`/auth/login?redirect=${encodeURIComponent(req.url)}`);
+  }
+  if (!client.redirectUris.includes(authorizeDto.redirect_uri)) {
+    throw new BadRequestException('unauthorized_client');
+  }
+  const params = new URLSearchParams();
+  params.set('code', '123456');
+  if (authorizeDto.state) {
+    params.set('state', authorizeDto.state);
+  }
+  return res
+    .status(302)
+    .redirect(`${authorizeDto.redirect_uri}?${params.toString()}`);
 }
 // ...
 ```
 
-```html
-<!-- ... -->
-<form action="" method="post">
-  <div>
-    <label>
-      username:
-      <input type="text" name="username" autocomplete="username" />
-    </label>
-  </div>
-  <div>
-    <label>
-      password:
-      <input type="password" name="password" autocomplete="current-password" />
-    </label>
-  </div>
-  <div>
-    <input type="submit" value="continue with OpenID Provider" />
-  </div>
-</form>
-<!-- ... -->
+```ts
+// src/auth/auth.controller.ts
+
+// ...
+@Post('login')
+login(
+  @Session() session: Record<string, any>,
+  @Body() loginDto: LoginDto,
+  @Res() res: Response,
+  @Query('redirect') redirect?: string,
+) {
+  const user = this.userService.getUserByUsernameAndPassword(
+    loginDto.username,
+    loginDto.password,
+  );
+  if (!user) throw new NotFoundException();
+  session.user = user;
+  return res.status(302).redirect(redirect ?? '/auth/info');
+}
+// ...
 ```
 
 ## 마치며
