@@ -297,7 +297,7 @@ $ yarn add class-validator class-transformer
 
 ### authorize endpoint (authorization code grant)
 
-https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest
+https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint
 
 OAuth 2.0 표준에 따라서 필요한 (쿼리) 파라미터들은 4개, 선택적으로 사용할 수 있는 것이 1개 있다.
 추가로 OpenID Connect가 허용하고 있는 것으로는 9개가 더 있다.
@@ -330,7 +330,12 @@ url을 리다이렉트 값으로 하여 이동 시키고, 로그인이 완료 �
 
 만약에 유저 정보가 있다면 클라이언트 정보를 가져오고, 클라이언트 정보에 등록된 리다이렉션 URI가 맞는지
 확인하고, 맞다면 인가 코드를 생성해서 리다이렉트 시키도록 하였다. 인가 코드를 생성하고 난 다음 그 코드를
-기억해야하는데, 이것은 `Nest.js`에서 제공하는 `@nestjs/cache-manager`를 사용하였다.
+기억해야하는데, 이것은 `Nest.js`에서 제공하는 `@nestjs/cache-manager`를 사용하였다. 나중에
+토큰을 발급할 때 검증하기 위해서 user, client, redirectUri를 캐시에 저장한다.
+
+scope에서는 ID Token을 포함시키기 위해서 `openid`를 넣어주어야 한다. 이외에도
+[표준으로 정의](https://openid.net/specs/openid-connect-core-1_0.html#Claims)되어있는
+scope의 이름에는 `profile`, `email`, `address`, `phone`등이 있다.
 
 ```ts
 // src/oauth/dto/authorize.dto.ts
@@ -378,10 +383,18 @@ export class AuthorizeDto {
 // src/oauth/oauth.service.ts
 
 // ...
-generateCode(user: UserEntity, client: ClientEntity) {
+interface CacheData {
+  user: UserEntity;
+  client: ClientEntity;
+  redirectUri: string;
+  nonce?: string;
+  scopes?: readonly string[];
+}
+// ...
+generateCode(data: CacheData) {
   const code = this.generateOpaqueToken();
   // cache-manager@v5에서는 ttl이 seconds에서 milliseconds 단위로 바뀌었다.
-  this.cacheManager.set(code, { user, client }, 3600e3);
+  this.cacheManager.set(code, data, 3600e3);
   return code;
 }
 // ...
@@ -412,7 +425,16 @@ authorize(
     throw new BadRequestException('unauthorized_client');
   }
   const params = new URLSearchParams();
-  params.set('code', this.oauthService.generateCode(user, client));
+  params.set(
+    'code',
+    this.oauthService.generateCode({
+      user,
+      client,
+      redirectUri: authorizeDto.redirect_uri,
+      nonce: authorizeDto.nonce,
+      scopes: authorizeDto.scope,
+    }),
+  );
   if (authorizeDto.state) {
     params.set('state', authorizeDto.state);
   }
@@ -444,6 +466,60 @@ login(
 }
 // ...
 ```
+
+### token endpoint (authorization code grant)
+
+https://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
+
+API 형태는 POST 메소드를 사용하고, application/x-www-form-urlencoded 형태로 요청을 보내야한다.
+OAuth 2.0 표준에 따라서 필요한 파라미터들은 4개이다. 또한 클라이언트 인증을 사용해야 한다. 이 글에서는
+클라이언트 시크릿을 Authorization 헤더 대신에 파라미터로 받도록 하였다.
+
+- grant_type(필수): 인가 방식을 나타낸다.
+  (authorization code grant flow에서는 authorization_code를 사용할 수 있다.)
+- code(필수): 인가 코드를 나타낸다.
+- redirect_uri(필요한 경우 필수): 인가 코드 발급시 사용한 리다이렉션 URI를 나타낸다.
+- client_id(필요한 경우 필수): 클라이언트를 식별하는 값이다.
+
+```ts
+// src/oauth/oauth.service.ts
+
+// ...
+async generateToken(tokenDto: TokenDto) {
+  const client = this.clientService.getClientByIdAndSecret(
+    tokenDto.client_id,
+    tokenDto.client_secret,
+  );
+  if (!client) {
+    throw new BadRequestException('unauthorized_client');
+  }
+
+  if (tokenDto.grant_type !== 'authorization_code') {
+    throw new BadRequestException('unsupported_grant_type');
+  }
+  if (!tokenDto.code) {
+    throw new BadRequestException('invalid_request');
+  }
+
+  const data = await this.cacheManager.get<CacheData>(tokenDto.code);
+  if (!data) {
+    throw new BadRequestException('invalid_grant');
+  }
+  this.cacheManager.del(tokenDto.code);
+
+  if (data.redirectUri !== tokenDto.redirect_uri) {
+    throw new BadRequestException('invalid_grant');
+  }
+  if (data.client.id !== client.id) {
+    throw new BadRequestException('invalid_client');
+  }
+
+  return this.createToken(data);
+}
+// ...
+```
+
+### create token
 
 ## 마치며
 
