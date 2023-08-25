@@ -239,16 +239,43 @@ info(@Session() session: Record<string, any>, @Res() res: Response) {
 ## Client module
 
 클라이언트를 관리하기 위한 모듈을 분리하였다. Auth module에서 했던 것과 마찬가지로 등록은 생략하고
-faker를 사용해서 랜덤한 클라이언트를 만들고 OAuth module에서 사용할 수 있게 열어두었다.
+faker를 사용해서 랜덤한 클라이언트를 만들고 OAuth module에서 사용할 수 있게 열어두었다. 마찬가지로
+`AppModule`에서 자동으로 붙은 `imports`는 지워주고, `ClientModule`에서 `ClientService`를
+`exports`에 추가하였다. 여기에서는 클라이언트의 id를 설정하는데에 crypto 모듈을 사용하였다.
 
 ```bash
 $ nest generate module client
-$ nest generate controller client
 $ nest generate service client
 ```
 
 ```ts
+// src/client/entities/client.entity.ts
 
+// ...
+export class ClientEntity {
+  id: string;
+  secret: string;
+
+  static random() {
+    const client = new ClientEntity();
+    // ...
+    return client;
+  }
+}
+```
+
+```ts
+// src/client/client.repository.ts
+
+// ...
+const clients = [...Array(20).map(() => ClientEntity.random())];
+
+@Injectable()
+export class ClientRepository {
+  getClientById(id: string) {
+    return clients.find((client) => client.id === id);
+  }
+}
 ```
 
 ## OAuth module
