@@ -327,6 +327,12 @@ authorize() {
 <!-- ... -->
 ```
 
+## 마치며
+
+이 글에서 구현한 OpenID Provider의 전체 코드는
+[GitHub 레포지토리](https://github.com/2paperstar/my-own-openid-provider)에서
+확인할 수 있다.
+
 ## 참고
 
 - [OAuth 2.0 인가 프레임워크](https://tools.ietf.org/html/rfc6749)
