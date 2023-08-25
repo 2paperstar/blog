@@ -21,7 +21,7 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
     - jwks_uri
   - userinfo endpoint
   - revoke endpoint
-- 유저 관리 (표준으로 정의된 영역 외, 이 글에서는 모두 구현하지 않음)
+- 유저 관리 (표준으로 정의된 영역 외, 이 글에서는 일부만 구현)
   - 회원가입
   - 로그인
   - 로그아웃
@@ -108,6 +108,118 @@ getUserByUsernameAndPassword(username: string, password: string) {
   return null;
 }
 // ...
+```
+
+## Auth module
+
+로그인 페이지, 유저 정보 페이지들을 담기 위한 모듈을 만들었다. 또한 현재 유저 정보를 저장하기 위해서
+`express-session`을 사용하였다.
+
+```bash
+$ nest generate module auth
+$ nest generate controller auth
+$ nest generate service auth
+$ yarn add express-session
+$ yarn add @types/express-session -D
+```
+
+```ts
+// src/main.ts
+
+// ...
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+// ...
+```
+
+### login
+
+우선 로그인 화면을 만들었다. 로그인이 성공하면 세션에 유저 정보를 저장하고, 실패하면 404에러를 반환한다.
+`UserModule`에서 랜덤한 유저를 가져오는 기능을 구현해서 `faker`가 생성한 유저 정보 중 하나를
+표시하도록 하였다.
+
+```ts
+// src/auth/auth.controller.ts
+@Get('login')
+@Render('auth/login')
+loginPage(@Session() session: Record<string, any>, @Res() res: Response) {
+  if (session.user) {
+    return res.status(302).redirect('/auth/info');
+  }
+  return { sample: this.userService.getRandomUser() };
+}
+
+@Post('login')
+login(
+  @Session() session: Record<string, any>,
+  @Body() loginDto: LoginDto,
+  @Res() res: Response,
+) {
+  const user = this.userService.getUserByUsernameAndPassword(
+    loginDto.username,
+    loginDto.password,
+  );
+  if (!user) throw new NotFoundException();
+  session.user = user;
+  return res.status(302).redirect('/auth/info');
+}
+```
+
+```html
+<!-- views/auth/login.hbs -->
+
+<!-- ... -->
+<div>sample username: {{ sample.username }}</div>
+<div>sample password: {{ sample.password }}</div>
+<form action="" method="post">
+  <div>
+    <label>
+      username:
+      <input type="text" name="username" autocomplete="username" />
+    </label>
+  </div>
+  <div>
+    <label>
+      password:
+      <input type="password" name="password" autocomplete="current-password" />
+    </label>
+  </div>
+  <div>
+    <input type="submit" value="Login" />
+  </div>
+</form>
+<!-- ... -->
+```
+
+### info
+
+현재 유저 정보를 가져오는 화면을 만들었다. 유저 정보가 없으면 자동으로 로그인 페이지로 이동하게 만든다.
+
+```ts
+// src/auth/auth.controller.ts
+
+// ...
+@Get('info')
+@Render('auth/info')
+info(@Session() session: Record<string, any>, @Res() res: Response) {
+  const user = session.user;
+  if (!user) {
+    res.status(302).redirect('/auth/login');
+  }
+  return { user };
+}
+```
+
+```html
+<!-- ... -->
+<div>username: {{ user.username }}</div>
+<div>email: {{ user.email }}</div>
+<!-- ... -->
 ```
 
 ## OAuth module
