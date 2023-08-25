@@ -521,6 +521,54 @@ async generateToken(tokenDto: TokenDto) {
 
 ### create token
 
+토큰을 생성하는 함수를 만들었다. 이 함수는 `generateToken`에서도 사용되고, 나중에 refresh token을
+발급할 때에도 변형하여 활용이 가능하다.
+
+```ts
+// src/oauth/oauth.service.ts
+private async createToken(data: CacheData) {
+  const accessToken = this.generateOpaqueToken();
+  await this.cacheManager.set(accessToken, data, 3600e3);
+  const refreshToken = this.generateOpaqueToken();
+  await this.cacheManager.set(refreshToken, data, 3600e3 * 24 * 30 * 6);
+  const expiresIn = 3600;
+  return {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    expires_in: expiresIn,
+    token_type: 'Bearer',
+    scope: data.scopes?.join(' ') || '',
+  };
+}
+```
+
+### id token
+
+위의 `createToken` 함수에 id token을 지원하기 위해서는 비대칭키를 사용해야한다. `openssl`을
+사용해서 만들 수도 있지만, `node.js`에서 제공하는 `crypto`모듈로도 생성할 수 있어서 실행할 때마다
+달라지는 동적인 비대칭키를 만들어서 사용하였다. 이 글에서는 RSA 알고리즘을 사용하였다.
+
+```ts
+const key = crypto.generateKeyPairSync('rsa', {
+  modulusLength: 2048,
+  publicKeyEncoding: {
+    type: 'spki',
+    format: 'pem',
+  },
+  privateKeyEncoding: {
+    type: 'pkcs8',
+    format: 'pem',
+  },
+});
+this.jwtPrivateKey = crypto.createPrivateKey(key.privateKey);
+this.jwtPublicKey = crypto.createPublicKey(key.publicKey);
+const hash = crypto.createHash('sha256');
+hash.update(this.jwtPublicKey.export({ type: 'spki', format: 'der' }));
+this.jwtKeyID = hash.digest('hex');
+```
+
+id token은 jwt를 사용해서 만들었다.
+
 ## 마치며
 
 이 글에서 구현한 OpenID Provider의 전체 코드는
