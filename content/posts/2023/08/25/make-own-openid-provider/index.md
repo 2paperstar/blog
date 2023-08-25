@@ -211,19 +211,21 @@ login(
 ### info
 
 현재 유저 정보를 가져오는 화면을 만들었다. 유저 정보가 없으면 자동으로 로그인 페이지로 이동하게 만든다.
+`@Render` 데코레이터를 사용하면 `Cannot set headers after they are sent to the client`라는
+에러가 발생하게 되는데 dynamic하게 template rendering을 해서 세션에 유저 정보가 없을 때에는
+렌더링을 하지 않게 막았다.
 
 ```ts
 // src/auth/auth.controller.ts
 
 // ...
 @Get('info')
-@Render('auth/info')
 info(@Session() session: Record<string, any>, @Res() res: Response) {
   const user = session.user;
   if (!user) {
-    res.status(302).redirect('/auth/login');
+    return res.status(302).redirect('/auth/login');
   }
-  return { user };
+  return res.render('auth/info', { user });
 }
 ```
 
@@ -232,6 +234,21 @@ info(@Session() session: Record<string, any>, @Res() res: Response) {
 <div>username: {{ user.username }}</div>
 <div>email: {{ user.email }}</div>
 <!-- ... -->
+```
+
+## Client module
+
+클라이언트를 관리하기 위한 모듈을 분리하였다. Auth module에서 했던 것과 마찬가지로 등록은 생략하고
+faker를 사용해서 랜덤한 클라이언트를 만들고 OAuth module에서 사용할 수 있게 열어두었다.
+
+```bash
+$ nest generate module client
+$ nest generate controller client
+$ nest generate service client
+```
+
+```ts
+
 ```
 
 ## OAuth module
