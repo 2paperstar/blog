@@ -663,6 +663,11 @@ discovery() {
 
 ## 마치며
 
+인증 서버가 표준화 되면 인증 서버를 유지보수하는 입장에서도, 사용하는 입장에서도 편리하다. 이 글에서
+다룬 내용을 기반으로 하여서 확장을 한다면 더 많은 기능을 구현할 수 있을 것이다. 지금 구현에는 refresh
+token을 사용해서 다시 토큰을 재발급하는 부분이 빠져있지만, 이 부분을 구현한다면 토큰을 발급받은 후에
+다시 사용자로부터 인증 요청을 하지 않더라도 토큰을 갱신할 수 있을 것이다.
+
 이 글에서 구현한 OpenID Provider의 전체 코드는
 [GitHub 레포지토리](https://github.com/2paperstar/my-own-openid-provider)에서
 확인할 수 있다.
@@ -679,7 +684,3 @@ discovery() {
 - [OpenID Connect - Google](https://developers.google.com/identity/openid-connect/openid-connect)
 - [OAuth 인증서버 만들기 with(oidc-provider)](https://cozy-ho.github.io/server/2021/07/19/Nodejs%EB%A1%9C-OAuth-%EC%9D%B8%EC%A6%9D%EC%84%9C%EB%B2%84-%EB%A7%8C%EB%93%A4%EA%B8%B0-oidc-provider.html)
 - [OAuth 2.0 - RFC6749 정리](https://chipmaker.tistory.com/entry/OAuth20-%EC%A0%95%EB%A6%AC)
-
-```
-
-```
