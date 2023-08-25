@@ -21,7 +21,7 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
     - jwks_uri
   - userinfo endpoint
   - revoke endpoint
-- 유저 관리 (표준으로 정의된 영역 외, 이 글에서는 구현하지 않음)
+- 유저 관리 (표준으로 정의된 영역 외, 이 글에서는 모두 구현하지 않음)
   - 회원가입
   - 로그인
   - 로그아웃
@@ -37,6 +37,77 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
 $ npm i -g @nestjs/cli
 $ yarn global add @nestjs/cli  # or yarn
 $ nest new my-own-openid-provider --strict -p yarn  # enable strict, use yarn
+```
+
+## User module
+
+유저 관리를 위한 모듈을 분리해서 나중에 OAuth 모듈에서 쉽게 가져가서 사용할 수 있도록 하였다.
+
+```bash
+$ nest generate module user
+$ nest generate service user
+```
+
+그리고 `user.module.ts`에서는 `UserService`를 export 하도록 바꾸고, `app.module.ts`에서
+자동으로 import된 `UserMoudle`은 제거하였다.
+
+### repository
+
+유저 정보를 저장할 데이터베이스를 선택하고, 그에 맞는 repository를 만들어야 한다. 이 글에서는 따로
+데이터베이스를 사용하지 않고, 메모리에 저장하는 방식으로 구현하였다. 그리고 `UserRepository`를
+`user.module.ts`의 `provider` 부분에 추가하였다. 랜덤으로 유저 정보를 만들 때에는
+[faker.js](https://npmjs.com/package/@faker-js/faker)를 사용하였다.
+
+```ts
+// src/user/entities/user.entity.ts
+
+export class UserEntity {
+  id: number;
+  username: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+
+  static randomWithId(id: number) {
+    const user = new UserEntity();
+    user.id = id;
+    // ...
+    return user;
+  }
+}
+```
+
+```ts
+// src/user/user.repository.ts
+
+// ...
+const users = [...Array(20)].map((_, id) => UserEntity.randomWithId(id));
+
+@Injectable()
+export class UserRepository {
+  getUserByUsername(username: string) {
+    return users.find((user) => user.username === username);
+  }
+}
+```
+
+### getUserByUsernameAndPassword
+
+Username과 Password를 받아서 유저 정보를 가져오는 함수를 만들었다.
+
+```ts
+// src/user/user.service.ts
+
+// ...
+getUserByUsernameAndPassword(username: string, password: string) {
+  const user = this.userRepository.getUserByUsername(username);
+  if (user && user.password === password) {
+    return user;
+  }
+  return null;
+}
+// ...
 ```
 
 ## OAuth module
