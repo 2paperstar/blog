@@ -328,6 +328,10 @@ authorize 파라미터에 사용되는 DTO를 validator, transformer와 함께 �
 url을 리다이렉트 값으로 하여 이동 시키고, 로그인이 완료 됐을 때에는 그 url로 다시 리다이렉트 시키도록
 하였다.
 
+만약에 유저 정보가 있다면 클라이언트 정보를 가져오고, 클라이언트 정보에 등록된 리다이렉션 URI가 맞는지
+확인하고, 맞다면 인가 코드를 생성해서 리다이렉트 시키도록 하였다. 인가 코드를 생성하고 난 다음 그 코드를
+기억해야하는데, 이것은 `Nest.js`에서 제공하는 `@nestjs/cache-manager`를 사용하였다.
+
 ```ts
 // src/oauth/dto/authorize.dto.ts
 
@@ -371,6 +375,19 @@ export class AuthorizeDto {
 ```
 
 ```ts
+// src/oauth/oauth.service.ts
+
+// ...
+generateCode(user: UserEntity, client: ClientEntity) {
+  const code = this.generateOpaqueToken();
+  // cache-manager@v5에서는 ttl이 seconds에서 milliseconds 단위로 바뀌었다.
+  this.cacheManager.set(code, { user, client }, 3600e3);
+  return code;
+}
+// ...
+```
+
+```ts
 // src/oauth/oauth.controller.ts
 
 // ...
@@ -395,7 +412,7 @@ authorize(
     throw new BadRequestException('unauthorized_client');
   }
   const params = new URLSearchParams();
-  params.set('code', '123456');
+  params.set('code', this.oauthService.generateCode(user, client));
   if (authorizeDto.state) {
     params.set('state', authorizeDto.state);
   }
