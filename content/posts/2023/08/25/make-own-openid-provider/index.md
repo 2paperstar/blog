@@ -21,6 +21,13 @@ OpenID Provider를 만드는데 필요한 요구 사항을 간단하게 정리�
     - jwks_uri
   - userinfo endpoint
   - revoke endpoint
+- 유저 관리 (표준으로 정의된 영역 외, 이 글에서는 구현하지 않음)
+  - 회원가입
+  - 로그인
+  - 로그아웃
+  - 비밀번호 변경
+  - 비밀번호 찾기
+  - 탈퇴
 
 ## 참고
 
