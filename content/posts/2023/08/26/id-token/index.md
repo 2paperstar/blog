@@ -1,6 +1,6 @@
 ---
 title: 'ID Token'
-date: 2023-08-26T11:25:21+09:00
+date: 2023-08-26T16:45:21+09:00
 tags: [oidc, jwt]
 featured_image: '/tags/oidc/logo.png'
 description: 'OIDC에서 사용되는 ID Token은 대체 어떻게 작동할까'
