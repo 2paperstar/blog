@@ -12,7 +12,8 @@ if [[ $2 == "undraft" ]]; then
   directory="content/posts/drafts/$title"
   if [[ -d $directory ]]; then
     newDirectory="content/posts/$path/$title"
-    mv $directory $newDirectory
+    mkdir -p $newDirectory
+    mv $directory "content/posts/$path"
     mv $newDirectory/index.md $newDirectory/index.md.bak
   else
     exit 1
