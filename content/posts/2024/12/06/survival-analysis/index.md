@@ -28,7 +28,7 @@ $$
 
 $$
 \delta = \begin{cases}
-1 & \text{if } T \leq C \\
+1 & \text{if } T \leq C \\\\
 0 & \text{if } T > C
 \end{cases}
 $$
