@@ -52,8 +52,8 @@ separating hyperplane 중에서도 가장 margin이 큰 hyperplane을 찾는 것
 margin은 hyperplane과 가장 가까운 점들 사이의 거리이다.
 
 $$
-\underset{\beta_0, \beta_1, \dots, \beta_p}{\text{maximize}}\ M \\
-\text{subject to} \sum_{j=1}^{p} \beta_j^2 = 1 \\
+\underset{\beta_0, \beta_1, \dots, \beta_p}{\text{maximize}}\ M \\\\
+\text{subject to} \sum_{j=1}^{p} \beta_j^2 = 1 \\\\
 y_i(\beta_0 + \beta_1x_{i1} + \cdots + \beta_px_{ip}) \geq M, \forall i=1,2,\dots,n
 $$
 
@@ -66,9 +66,9 @@ $$
 이는 **soft** margin을 최대화하는 분류기이다.
 
 $$
-\underset{\beta_0, \beta_1, \dots, \beta_p, \epsilon_1, \dots, \epsilon_n}{\text{maximize}}\ M\
-\text{subject to} \sum_{j=1}^{p} \beta_j^2 = 1 \\
-y_i(\beta_0 + \beta_1x_{i1} + \cdots + \beta_px_{ip}) \geq M (1 - \epsilon_i), \\
+\underset{\beta_0, \beta_1, \dots, \beta_p, \epsilon_1, \dots, \epsilon_n}{\text{maximize}}\\ M\\
+\text{subject to} \sum_{j=1}^{p} \beta_j^2 = 1 \\\\
+y_i(\beta_0 + \beta_1x_{i1} + \cdots + \beta_px_{ip}) \geq M (1 - \epsilon_i), \\\\
 \epsilon_i \geq 0, \sum_{i=1}^{n} \epsilon_i \leq C
 $$
 
@@ -132,10 +132,10 @@ $$
 예를들어 $p=2$ 이고 $d=2$인 경우에는 다음과 같이 정의된다.
 
 $$
-\begin{align*}
-K(x, x') & = (1 + x_1x_1' + x_2x_2')^2 \\
-& = 1 + 2x_1x_1' + 2x_2x_2' + x_1^2x_1'^2 + 2x_1x_2x_1'x_2' + x_2^2x_2'^2 \\
-\end{align*}
+\begin{aligned}
+K(x, x') & = (1 + x_1x_1' + x_2x_2')^2 \\\\
+& = 1 + 2x_1x_1' + 2x_2x_2' + x_1^2x_1'^2 + 2x_1x_2x_1'x_2' + x_2^2x_2'^2 \\\\
+\end{aligned}
 $$
 
 quadric surface를 만드는데 필요한 ${p + d} \choose d$개의 term이 생성된다.
@@ -164,7 +164,7 @@ $K$가 그렇게 크지 않다면 OVO를 선택한다.
 - SVM의 loss function은 hinge loss이다.
 
 $$
-\underset{x \in S}{\text{minimize}} \sum_{i=1}^{n} \max[0, 1 - y_i f(x_i)] + \lambda ||\beta||^2)
+\underset{x \in S}{\text{minimize}} \sum_{i=1}^{n} \\{ \max[0, 1 - y_i f(x_i)] + \lambda ||\beta||^2 \\}
 $$
 
 - class가 (거의) linearly separable하다면 SVM이 더 좋다. LDA
