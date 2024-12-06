@@ -194,8 +194,7 @@ $$
 $$
 \frac
 {h_0(h_i) \exp \left ( \sum_{j=1}^p x_{ij} \beta_j \right)}
-{\sum_{i': y_{i'} \geq y_i} h_0(y_i) \exp \left( \sum_{j=1}^p x_{i'j} \beta_j \right)}
-=
+{\sum_{i': y_{i'} \geq y_i} h_0(y_i) \exp \left( \sum_{j=1}^p x_{i'j} \beta_j \right)} =
 \frac
 {\exp \left ( \sum_{j=1}^p x_{ij} \beta_j \right)}
 {\sum_{i': y_{i'} \geq y_i} \exp \left( \sum_{j=1}^p x_{i'j} \beta_j \right)}
