@@ -1,12 +1,15 @@
 <script
   async
   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8930261930758516"
-  crossorigin="anonymous"
-></script>
+  crossorigin="anonymous"></script>
 
 {{ if .Page.Store.Get "hasMermaid" }}
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
-</script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+{{ end }}
+
+{{ if .Param "math" }}
+  {{ partialCached "math.html" . }}
 {{ end }}
