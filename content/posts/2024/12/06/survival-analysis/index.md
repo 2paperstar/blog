@@ -228,3 +228,26 @@ single predictor $x_i \in {0, 1}$이 있을 때, 두 그룹의 survival times을
 *score test*가 가장 일반적이다.
 만약에 single binary covariate면 Cox's proportional hazards model에서
 score test의 값은 log-rank test와 완전히 일치한다.
+
+## Example: Publication Data
+
+log-rank test를 했을 때에는 $p$-value가 0.36으로 나와서 posres의 차이가
+유의미하지 않은 것으로 드러난다. 하지만 Cox's proportional hazards model을
+fit했을 때에는 $p$-value가 0.00으로 나와서 posres의 차이가 유의미한 것으로
+나타난다. coefficient가 0.55로 negative일 때보다 $e^{0.55} \approx 1.74$배
+더 높은 hazard를 가진다.
+
+특정 $h_0(t)$를 추정한 다음에 (이 과정은 out of course)
+주요 predictor외의 다른 predictor 들을 대표값(mean, mode)로 설정하면
+Adjusted Survival Curves를 얻을 수 있다.
+
+## Additional: Shrinkage for the Cox Model
+
+Cox Model도 Shrinkage를 적용할 수 있다.
+
+$$
+-\log\left(\prod_{i: \delta_{i} = 1} \frac{\exp\left(\sum_{j=1}^p x_{ij}\beta_j \right) }{\sum_{i':y_{i'} \geq y_i} \exp \left(\sum_{j=1}^p x_{i'j}\beta_j \right)} \right) + \lambda P(\beta)
+$$
+
+$P(\beta)$는 penalty term으로, lasso($L_1$ penalty, $\sum_{j=1}^p \beta_j^2$)나
+ridge($L_2$ penalty, $\sum_{j=1}^p |\beta_j|$)를 사용할 수 있다.
