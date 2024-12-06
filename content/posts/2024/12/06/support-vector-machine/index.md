@@ -4,6 +4,7 @@ date: 2024-12-06T02:25:17+09:00
 tags: [ISL]
 featured_image: ""
 description: ""
+math: true
 ---
 
 # Support Vector Machine
