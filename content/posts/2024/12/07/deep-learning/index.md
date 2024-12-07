@@ -184,7 +184,7 @@ $$
 
 ## IMDB with RNN
 
-IMDB에서는 sequence of words ${\left\{\mathcal{W}_l\right\}}_1^L$로 이루어져있고,
+IMDB에서는 sequence of words ${\left\\{\mathcal{W}_l\right\\}}_1^L$로 이루어져있고,
 각 문서의 단어 길이가 다르기 때문에 turncate, padding을 사용해서
 문서의 길이를 동일하게 맞춘다 ($L=500$)
 
@@ -290,10 +290,12 @@ CNN, RNN과 같은 딥러닝 모델은 *signal to noise ratio*가 높을 때 유
 딥러닝 모델은 많은 파라미터를 가지고 있기 때문에 fitting이 어렵다.
 
 $$
-\underset{\{w_k\}_1^K}{\text{minimize}} \frac 1 2
-\sum_{i=1}^n (y_i - f(x_i))^2 \\\\
-\text{where}
-f(x_i) = \beta_0 + \sum_{k=1}^K \beta_k g(w_{k0} + \sum_{j=1}^p w_{kj}x_{ij})
+\begin{align*}
+& \underset{\\{w_k\\}_1^K}{\text{minimize}} \frac 1 2
+\sum _ {i=1}^n (y _ i - f(x _ i))^2 \\\\
+& \text{ where }
+f(x _ i) = \beta _ 0 + \sum _ {k=1}^K \beta _ k g(w _ {k0} + \sum _ {j=1}^p w _ {kj}x _ {ij})
+\end{align*}
 $$
 
 최소화할 대상이 *non-convex* 형태여서 까다롭지만, 이를 최적화 할 수 있는
@@ -345,19 +347,18 @@ $$
 Backpropagation은 미분의 chain rule을 사용한다.
 
 $$
-\begin{align*}
+\begin{aligned}
 \frac {\partial R_i(\theta)} {\partial \beta_k} &= 
 \frac {\partial R_i(\theta)} {\partial f_\theta(x_i)} \cdot
 \frac {\partial f_\theta(x_i)} {\partial \beta_k}
 = -(y_i - f_\theta(x_i)) \cdot g(z_{ik}) \\\\
-
 \frac {\partial R_i(\theta)} {\partial w_{kj}} &=
 \frac {\partial R_i(\theta)} {\partial f_\theta(x_i)} \cdot
 \frac {\partial f_\theta(x_i)} {\partial g(z_{ik})} \cdot
 \frac {\partial g(z_{ik})} {\partial z_{ik}}
 \cdot \frac {\partial z_{ik}} {\partial w_{kj}} \\\\
 &= -(y_i - f_\theta(x_i)) \cdot \beta_k \cdot g'(z_{ik}) \cdot x_{ij}
-\end{align*}
+\end{aligned}
 $$
 
 ## Tricks of the Trade
