@@ -44,7 +44,7 @@ $$
 (또는 cross-entropy)를 최소화하는 $\beta_k, w_{kj}$를 찾아야 한다.
 
 $$
-- \sum_{i=1}^n \sum_{m=1}^M y_{im} \log(f_m(x_i)) \\\\
+-\sum_{i=1}^n \sum_{m=1}^M y_{im} \log(f_m(x_i))
 $$
 
 $$
@@ -292,9 +292,9 @@ CNN, RNN과 같은 딥러닝 모델은 *signal to noise ratio*가 높을 때 유
 $$
 \begin{align*}
 & \underset{\\{w_k\\}_1^K}{\text{minimize}} \frac 1 2
-\sum _ {i=1}^n (y _ i - f(x _ i))^2 \\\\
+\sum _{i=1}^n (y_i - f(x_i))^2 \\\\
 & \text{ where }
-f(x _ i) = \beta _ 0 + \sum _ {k=1}^K \beta _ k g(w _ {k0} + \sum _ {j=1}^p w _ {kj}x _ {ij})
+f(x_i) = \beta_0 + \sum _{k=1}^K \beta_k g(w _{k0} + \sum _{j=1}^p w _{kj}x _{ij})
 \end{align*}
 $$
 
