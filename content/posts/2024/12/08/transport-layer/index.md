@@ -7,9 +7,7 @@ description: ""
 math: true
 ---
 
-# UDP
-
-User Datagram Protocol
+# UDP: User Datagram Protocol
 
 connectionless한 프로토콜이고,
 TCP와 다르게 handshake과정이 없다.
@@ -242,4 +240,89 @@ D_{trans} = \frac L R = \frac {8000 \text{bits}} {10^9 \text{bits} / \text{sec}}
 $$
 위와 같이 나온다.
 
+여기에서 Utilization $U_{sender}$, sender가 패킷을 보내는데에 할애하는 비율을 계산하면
+
+$$
+U_{sender} = \frac {D} {D + 2 \times \text{propagation delay}}
+= \frac {L / R} {RTT + L / R}
+= \frac {0.008} {30.008}
+= 0.00027
+$$
+위와 같이 나온다.
+
+utilization이 겨우 0.027%로 나온다.
+1Gbps link를 사용하고 있지만, 0.027%인 270kbps로 보내고 있는 것이다.
+프로토콜이 그 밑에 있는 infrastructure, channel의 자원을 충분히 사용하지
+못하고 있는 것이다.
+
+## Pipelining: increased utilization
+
+sender가 여러개의 패킷을 한번에 보낼 수 있게 한다면
+배로 빠르게 데이터를 보낼 수 있다.
+ACK를 실제로 받진 않았지만, ACK를 받을것으로 예상하고 패킷을 보내는 것이다.
+이전 프로토콜에서는 0, 1, 0, 1, 0, 1, ...의 sequence number를 사용했다면
+sequence number의 범위가 넓어지게 될 것이다.
+그리고 여러가지 패킷을 기억하고 있다가 ACK가 오지 않으면 다시 보내야하기 때문에
+sender는 버퍼를 가지고 있어야 하고,
+receiver는 패킷 손실에 대비하기 위해서 받은 패킷을 저장할 버퍼가 필요하다.
+
+이를 구현하는 프로토콜이 두가지가 있다.
+똑같이 N개의 ACK되지 않은 패킷을 보내는 것이지만,
+- Go-Back-N: Receiver는 cumulative하게 ACK를 보낸다.
+이 말은 즉슨, gap이 발생한 경우 ACK를 보내지 않는 것이다.
+sender는 timer를 가지고 timer가 끝나면 unACKed 된 패킷을 다시 보낸다.
+데이터 전송을 위해서 추가적인 버퍼가 필요하지 않다.
+- Selective Repeat: Receiver는 각각의 패킷에 대해서 ACK를 보낸다.
+sender는 각 패킷에 대해서 timer를 가지고 있다가
+timer가 끝나면 해당 패킷만 다시 보낸다.
+data transmission은 줄어들지만, 버퍼링이 필요하다.
+
+## Go-Back-N
+
+sender는 N이라는 window사이즈까지 한번에 보낼 수 있고,
+ACK(n)을 받으면 n까지의 패킷은 모두 받았다고 가정한다.
+만약에 ACK(n)을 timeout이 될때까지 받지 못했다면 n까지의 패킷을 다시 보내고,
+n이 보낸 패킷에 못 미치는 경우에는 n+1부터 다시 보낸다.
+
+다시 풀어서 설명하면 정해진 window size만큼 뭉텅이로 보내는데,
+모두 잘 보내졌다면(ACK(nextseqnum-1)을 받았다면) 다음으로 옮겨서 보내고,
+ACK(n)에서 n이 nextseqnum-1보다 작으면 nextseqnum부터 nextseqnum+N-1까지
+다시 보낸다.
+
+sender 입장에서는 packet이 순서대로 올 때 그에 맞는 ack 번호로 응답을 하고,
+건너뛴 패킷이 들어오면 이전에 마지막으로 응답했던 ack 번호로 다시 응답을 해서
+sender가 그 다음패킷부터 다시 전송하도록 한다.
+만약에 패킷이 전부 손실되어 전달되지 않더라도 sender가 가지고 있는 timeout에
+의해서 패킷이 재전송 될 것이다.
+
+## Selective Repeat
+
+receiver가 각각의 패킷에 대해서 ACK 응답을 보내는 것이다.
+이 방식은 버퍼가 필요하다. 왜냐하면 transport 계층에서는 무작위 순서대로
+패킷이 들어오더라도 상위 계층에 전달을 할 때에는 순서대로 전달이 되어야 하기
+때문이다.
+sender가 timeout이 되면 unACKed 된 패킷을 다시 보낸다.
+이때 하나의 timer를 가지고 있는게 아니라 각 패킷마다 타이머를 가지게 될 것이다.
+Go-Back-N처럼 N개의 window를 가지고 있고, 한번에 N개의 unACKed 패킷을 보낼 수 있다.
+ACK(n)에서 n이 window에서 가장 작은 패킷 번호라면 window를 옮겨서
+다음 패킷을 보낼 수 있도록 한다.
+
+receiver 입장에서는 받은 패킷에 대해서 ACK(n)을 보내고,
+순서에 맞지 않은 패킷은 버퍼에 저장한다.
+그리고 위쪽 레이어에는 패킷 순서대로 전달을 하며,
+누락된 패킷이 채워진다면 그 이후 패킷을 다시 순서대로 전달한다.
+혹여나 이미 위쪽으로 보낸 패킷이 중복되어서 올때가 있는데
+(ACK 패킷이 loss된 경우)
+이때는 다시 ACK(n)을 보내서 sender에게 해당 패킷을 받았음을 다시 알려준다.
+
+### dilemma in Selective Repeat
+
+위에서 언급한 ACK 패킷이 loss된 경우에 문제가 생긴다.
+window size와 sequence number의 범위가 같다면
+sender가 ACK패킷을 못 받았을 때 동일한 sequence number를 사용한 이전 패킷을
+sender가 재전송하면서 receiver 입장에서는 뒤쪽 패킷을 받아야하는데
+앞쪽 패킷을 똑같이 반복해서 받는 문제가 생긴다.
+window size와 sequence number의 범위가 비슷한 것을 가정했기 때문에
+위에서 언급한대로 무시를 할 수가 없는 상황이다.
+이를 해결하기 위해서는 sequence number의 범위를 window size보다 2배 크게 하면 된다.
 
