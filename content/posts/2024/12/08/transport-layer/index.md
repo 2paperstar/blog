@@ -326,3 +326,49 @@ window size와 sequence number의 범위가 비슷한 것을 가정했기 때문
 위에서 언급한대로 무시를 할 수가 없는 상황이다.
 이를 해결하기 위해서는 sequence number의 범위를 window size보다 2배 크게 하면 된다.
 
+# TCP: Transmission Control Protocol
+
+TCP는 하나의 sender와 하나의 receiver가 서로 연결되는 프로토콜이며,
+TCP는 reliable하고 in-order byte stream을 제공한다.
+즉, 데이터가 개별 메시지로 전달 되는 것이 아니라 바이트의 흐름으로 전달된다.
+다시 말해서 application layer에서 데이터를 보낸다고 해도
+TCP는 그것을 연속된 byte 형태로 보내기 때문에 받는 쪽에서는 이게 개별 메시지인지
+알 수가 없다. application layer에서 프로토콜을 정의하여서 이를 구분해야 한다.
+
+TCP는 full duplex connection으로, 양쪽에서 동시에 데이터를 보낼 수 있다.
+또한, TCP는 connection-oriented이다.
+connection을 설정하고, 데이터를 보내고, connection을 해제하는 과정이 있다.
+
+cumulative ACK를 사용하고, pipelining을 사용해서 congestion, flow control을 한다.
+그래서 receiver가 데이터를 못 받는 상황일 때 조금 더 천천히 다시 보내는 역할을
+TCP 자체에서 수행한다.
+
+## TCP segment structure
+
+```mermaid
+packet-beta
+  0-15: "Source Port"
+  16-31: "Destination Port"
+  32-63: "Sequence Number"
+  64-95: "Acknowledgment Number"
+  96-99: "head len"
+  100-103: "not used"
+  104: "C"
+  105: "E"
+  106: "U"
+  107: "A"
+  108: "P"
+  109: "R"
+  110: "S"
+  111: "F"
+  112-127: "receive window"
+  128-143: "checksum"
+  144-159: "urgent pointer"
+  160-191: "options (variable length)"
+  192-255: "data (variable length)"
+```
+
+- sequence number: byte 단위로 전달되는 데이터의 순서를 나타낸다.
+(이는 segment의 number가 아니다)
+- receive window: receiver가 받고 싶어하는 데이터의 양을 나타낸다.
+속도가 느려졌을 때 이 값을 줄여서 sender가 더 천천히 보내게 한다.
