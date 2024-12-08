@@ -1,5 +1,5 @@
 ---
-title: "Network Layer: data plane"
+title: "Network Layer: Data Plane"
 date: 2024-12-08T19:40:35+09:00
 tags: [CNTDA]
 featured_image: ""
