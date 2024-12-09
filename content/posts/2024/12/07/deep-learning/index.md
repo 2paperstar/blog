@@ -210,6 +210,9 @@ Embedding은 아주 많은 corpora를 사용해서 학습된다.
 
 하지만 76%라는 좋지 않은 결과를 보여주었다.
 (위에서 다룬 방법을 사용한 경우 90% 이상)
+여기에서는 그 이유를 구체적으로 다루고 있지는 않지만,
+RNN이 recurrent하게 연속되면서 weight값이 계속 곱해지면서
+gradient가 사라지는 *gradient vanishing* 문제가 발생한다.
 RNN 대신에 LSTM(Long Short-Term Memory)을 사용하면 더 좋은 결과를 보여주지만
 이 역시 87%로, `glmnet`으로 얻을 수 있는 성능인 88%보다 적게 나온다.
 2020년 기준으로 95% 이상을 보여주는 모델이 있다. (out of scope)
