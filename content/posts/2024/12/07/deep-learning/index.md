@@ -16,6 +16,13 @@ Neural Network는 1980년대에 유행하기 시작했는데, 1990년대에 SVM,
 
 # Single Layer Neural Network
 
+Single Layer Neural Network를 말하기 이전에 AND, OR, XOR Gate 문제에 대해서
+언급하고자 한다.
+$y = \text{AND}(x1, x2)$나 $y= \text{OR}(x1, x2)$는 linear하게 분류할 수 있다.
+하지만 $y = \text{XOR}(x1, x2)$는 linear하게 분류할 수 없다.
+즉, XOR Gate는 Single Perceptron으로 처리가 될 수 없다는 뜻이다.
+이는 Hidden Layer를 추가해서 해결할 수 있다.
+
 Hidden Layer가 1개인 Neural Network를 Single Layer Neural Network라고 한다.
 
 $$
