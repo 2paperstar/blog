@@ -41,7 +41,7 @@ network layer는 호스트, 라우터 등 모든 장비에 존재한다.
 
 | Service Model                 | Throughput     | Loss     | Order    | Delay |
 | ----------------------------- | -------------- | -------- | -------- | ----- |
-| Inernet (Best effort)         | none           | no       | no       | no    |
+| **Inernet (Best effort)**     | none           | no       | no       | no    |
 | ATM (Constant Bit Rate)       | Constant Rate  | yes      | yes      | yes   |
 | ATM (Available Bit Rate)      | Guaranteed min | no       | yes      | no    |
 | Internet (Intserv Guarenteed) | yes            | yes      | yes      | yes   |
