@@ -207,13 +207,6 @@ $$
 $$
 각 클래스마다 최소 대역폭이 보장된다.
 
-## Network Neutrality
-
-- technical: ISP가 어떻게 자원을 나누고 할당하는지에 대한 문제이다.
-  - packet scheduling, buffer management 등이 있다.
-이에 사회적인, 경제적인 원리가 따른다.
-차별 없이 인터넷 트래픽을 처리하고 전달하는 것에 대한 원칙이다.
-
 # IP: Internet Protocol
 
 ## IP Datagram Format
