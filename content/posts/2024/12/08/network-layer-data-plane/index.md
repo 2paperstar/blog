@@ -276,9 +276,14 @@ x의 값이 subnet part의 비트 길이를 나타낸다.
 - 사용하지 않는 주소를 다른 호스트가 재사용할 수 있게 해준다
 - 모바일 유저가 네트워크에 연결, 끊을 수 있게 해준다
 
-host가 DHCP discover 메시지를 전달하고, DHCP server가 DHCP offset 메시지를 보내면
-host는 IP 주소를 요청하는 DHCP request 메시지를 보내고 DHCP server가
-DHCP ack 메시지를 보내서 확인 받는다.
+1. host가 DHCP discover 메시지를 전달하고
+2. DHCP server가 DHCP offset 메시지를 보내면
+3. host는 IP 주소를 요청하는 DHCP request 메시지를 보내고
+4. DHCP server가 DHCP ack 메시지를 보내서 호스트는 확인 받는다.
+
+실제로 IP가 할당된 상태가 아니기 때문에 클라이언트를 특정할 수 없어서
+모든 메시지는 broadcast 메시지로 전달된다. 그리고 각 호스트는
+자신이 보낸 요청인지 구분하기 위해서 Transaction ID를 사용한다.
 
 DHCP는 단순히 IP address를 할당하는 것 뿐만 아니라 추가적인 정보를 준다
 - 클라이언트가 외부 네트워크와 통신할 때 사용할 게이트웨이, first-hop router의 주소
@@ -337,7 +342,7 @@ NAT를 구현하기 위해서는 세가지의 구현이 필요하다
    로컬 네트워크로 전달
 
 하지만 NAT에는 몇가지 논란이 있었다.
-- router는 layer 3, network layer에서 동작하는데, NAT번호를 알아야 한다.
+- router는 L3에서 동작하는데, 포트번호를 알기 위해서는 L4까지 올라가야 한다.
 - address자체가 부족한 것은 IPv6로 해결해야한다.
 - end-to-end principle을 위반한다.
   이 말은 router가 데이터를 전달하는 역할만 해야 하는데,
