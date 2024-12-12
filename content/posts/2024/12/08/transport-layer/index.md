@@ -368,7 +368,33 @@ packet-beta
   192-255: "data (variable length)"
 ```
 
-- sequence number: byte 단위로 전달되는 데이터의 순서를 나타낸다.
-(이는 segment의 number가 아니다)
 - receive window: receiver가 받고 싶어하는 데이터의 양을 나타낸다.
 속도가 느려졌을 때 이 값을 줄여서 sender가 더 천천히 보내게 한다.
+
+## Sequence Number
+
+sequence number: byte 단위로 전달되는 데이터의 순서를 나타낸다.
+(이는 segment의 number가 아니다)
+
+ACK로는 다음으로 받고 싶어하는 데이터의 sequence number를 보낸다.
+그러면 sender는 그 sequence number부터의 데이터를 보내게 된다.
+
+sender 입장에서는 GBN과 비슷하게 동작을 한다.
+receiver 입장에서는 아래와 같이 동작한다.
+
+- 모든 패킷이 순서대로 도착하고 있는데 이미 ACK한 패킷일 때: **delayed ACK**
+  다음 패킷이 올 때까지 500ms정도 기다리고, 패킷이 더 이상 오지 않으면 ACK를 보냄.
+  즉, sender 입장에서는 패킷이 loss돼서 다시 보내야 한다고 판단한 것이기 때문에
+  다시 보내는 패킷이 다 올 때까지 기다리고 마지막 ACK를 보내는 것이다.
+- 모든 패킷이 순서대로 도착할 때: **immediate ACK**
+  패킷이 도착하면 바로 ACK를 보냄.
+- 패킷이 순서대로 도착하지 않을 때, 즉 gap이 발생할 때: **duplicate ACK**
+  sender가 다시 패킷을 보내도록 중복 ACK를 보낸다.
+- gap을 채우는 패킷이 도착했을 때: **immediate ACK**
+  duplicate ACK로 인해서 sender가 패킷을 다시 보낼 수 있으니
+  즉시 ACK를 보내서 패킷을 받았음을 알린다.
+
+또한 TCP는 fast retransmit을 사용하고 있는데,
+3번의 duplicate ACK를 받으면 패킷이 lost 되었다고 가정하고
+패킷을 다시 보내는 것이다. (timeout까지 기다리지 않음)
+
