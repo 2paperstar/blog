@@ -197,7 +197,7 @@ $\mathcal{O}$는 관측된 데이터($n \times p$)에서의 index set $(i, j)$�
 
 1. Initialize: mean imputation으로 채워넣은 data matrix $\tilde{X}$를 만든다.
 2. Repeat: 아래 방법을 3번이 감소하지 않을 때까지 반복한다.
-   1. $\tilde{X}$의 principal components를 계산해서 다음 식을 최적화 한다. $\underset{\bold{A \in \mathbb{R}^{n \times M}}, \bold{B \in \mathbb{R}^{p \times M}}}{\text{minimize}}\left\\{ \sum_{(i, j) \in \mathcal{O}} (\tilde{x}_ {ij} - \sum_{m=1}^M a_{im}b_{jm})^2 \right\\}$
+   1. $\tilde{X}$의 principal components를 계산해서 다음 식을 최적화 한다. $\underset{\bold{A \in \mathbb{R}^{n \times M}}, \bold{B \in \mathbb{R}^{p \times M}}}{\text{minimize}}\left\\{ \sum_{j=1}^p \sum_{i=1}^n (\tilde{x}_ {ij} - \sum_{m=1}^M a_{im}b_{jm})^2 \right\\}$
    2. 없는 데이터 $(i, j) \notin \mathcal{O}$에 대해 $\tilde{x}_ {ij} \larr \sum_{m=1}^M \hat{a}_ {im}\hat{b}_ {jm}$로 설정한다.
    3. $\sum_{(i, j) \in \mathcal{O}} \left(x_{ij} - \sum_{m=1}^M \hat{a}_ {im} \hat{b}_ {jm} \right)^2$
 3. missing entries인 $\tilde{x}_{ij}$, $(i, j) \notin \mathcal{O}$를 얻는다.
