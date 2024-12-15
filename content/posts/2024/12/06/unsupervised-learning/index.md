@@ -297,7 +297,7 @@ $$
 \sum _ {i, i' \in C _ k}
 \sum _ {j=1}^p
 (x _ {ij} - x _ {i'j})^2 =
-2 \sum _ {i \in C _ k}
+2 \sum _ {i \in C _ k} \sum _ {j = 1}^p
 (x _ {ij} - \bar{x} _ {kj})^2 \\\\
 \text{ where }
 \bar{x} _ {kj} = \frac 1 {| C _ k |}
