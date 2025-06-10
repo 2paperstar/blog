@@ -4,6 +4,7 @@ date: 2024-08-28T01:14:38+09:00
 tags: []
 featured_image: ''
 description: ''
+math: true
 ---
 
 > 이 글의 초기 버전은 `2023-10-15T22:45:12+09:00`에 작성되었습니다.
