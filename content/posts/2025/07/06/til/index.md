@@ -10,6 +10,11 @@ description: ""
 때문에 React Native에서 일어나는 troubleshooting 관련 글이 많을 예정이다.
 특히나 pnpm monorepo 환경에서 RN을 사용하고 있기 때문에 더욱 특수한 상황일 것이다.
 
+RN에서 어떤 문제가 일어나면 일단은 `pnpm start --reset-cache`와 `pnpm run ios`,
+`pnpm run android`를 다시 실행해서 새로운 환경으로 만들어보는 것이
+중요한 것 같다. 알 수 없는 이유로 인해서 잘 돌아가던 코드들이 안 돌아가는
+이슈가 경험상으로 많았던 것 같다.
+
 지금 사용하는 환경은 아래와 같다.
 
 - React: 19.1.0
