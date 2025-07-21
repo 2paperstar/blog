@@ -4,7 +4,7 @@ defaultContentLanguage = 'ko'
 hasCJKLanguage = true
 title = 'paperstar blog'
 theme = 'ananke'
-newContentEditor = "code"
+newContentEditor = "cursor"
 enableRobotsTXT = true
 
 [markup]
