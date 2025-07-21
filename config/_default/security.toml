@@ -1,2 +1,2 @@
 [exec]
-allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^npx$', '^postcss$', '^code$']
+allow = ['^(dart-)?sass(-embedded)?$', '^go$', '^npx$', '^postcss$', '^code$', '^cursor$']
