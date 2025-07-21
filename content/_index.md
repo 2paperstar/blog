@@ -1,3 +1,3 @@
 ---
-description: 만드는 것을 좋아하는 개발자입니다.
+description: 불가능한 것을 만드는 도전
 ---
