@@ -1,7 +1,7 @@
 ---
 title: "Game Tree"
 date: 2025-07-21T15:36:23-07:00
-tags: []
+tags: [artificial-intelligence]
 featured_image: ""
 description: ""
 math: true

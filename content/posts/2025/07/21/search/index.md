@@ -1,7 +1,7 @@
 ---
 title: "Search"
 date: 2025-07-21T15:30:32-07:00
-tags: []
+tags: [artificial-intelligence]
 featured_image: ""
 description: ""
 math: true
@@ -28,7 +28,7 @@ math: true
   - UCS (Uniform Cost Search)
     - strategy: expand cheapest node first
     - fringe: priority queue (w/ cumulative cost)
-    - for solution cost $C^*$, minimum arc cost $\varepsilon$ => effective depth $C^* / \varepsilon$ (tiers)
+    - for solution cost $C^\*$, minimum arc cost $\varepsilon$ => effective depth $C^* / \varepsilon$ (tiers)
     - time: $O(b^{C^*  / \varepsilon})$
     - space: $O(b^{C^*  / \varepsilon})$
     - complete / optimal
@@ -37,8 +37,8 @@ math: true
   - A*
     - uniform-cost: orders by path cost / *backward cost* $g(n)
     - greedy: orders by goal proximity / *forward cost* $h(n)$
-    - A*: orders by the sum: $f(n) = g(n) + h(n)
+    - A*: orders by the sum: $f(n) = g(n) + h(n)$
     - admissible heuristics
-      - $\iff 0 \le h(n) \le h^*(n) \quad \text{where }h^*(n)$ is the true cost to nearest cost
+      - $\iff 0 \le h(n) \le h^\*(n) \quad $where $h^*(n)$ is the true cost to nearest cost
       - -> make problem simpler
     - consistent heuristics

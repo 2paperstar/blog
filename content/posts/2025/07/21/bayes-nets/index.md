@@ -1,15 +1,22 @@
 ---
-title: "Bayes Nets"
+title: "Bayes' Nets"
 date: 2025-07-21T15:45:56-07:00
-tags: []
+tags: [artificial-intelligence]
 featured_image: ""
 description: ""
+math: true
 ---
+
+$$
+% latex command here
+\gdef\independent{\perp\kern-5pt \perp}
+\gdef\ConditionallyIndependent#1#2#3{#1 \perp\kern-5pt \perp #2 \mid #3}
+$$
 
 - Probability
   - Marginal Distribution
   - Conditional Probabilities
-    - Normalization Trick
+    - Normalization **Trick**
   - Inference
     - Inference by Enumeration
     - Inference with Bayes' Rules

@@ -1,7 +1,7 @@
 ---
-title: "Mdp"
+title: "MDP (Markov Decision Process)"
 date: 2025-07-21T15:44:12-07:00
-tags: []
+tags: [artificial-intelligence]
 featured_image: ""
 description: ""
 math: mdp
@@ -22,7 +22,7 @@ math: mdp
     - $V_0^\pi(s) = 0$
     - $V_{k+1}^\pi(s) \gets \sum_{s'}T(s, \pi(s), s')[R(s, \pi(s), s') + \gamma V_{k}^\pi (s')]$
     - time: $O(S^2)$ per iteration
-    - extraction: $\pi^*(s) = \arg\max_a\sum_{s'}T(s, a, s')[R(s, a, s') + \gamma V^*(s')]$
-    - extraction: $\pi^*(s) = \arg\max_a Q^*(s, a)$
+    - extraction: $\pi^\*(s) = \arg\max_a\sum_{s'}T(s, a, s')\[R(s, a, s') + \gamma V^*(s')]$
+    - extraction: $\pi^\*(s) = \arg\max_a Q^\*(s, a)$
   - policy improvement
     - update with one-step look-ahead

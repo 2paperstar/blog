@@ -1,7 +1,7 @@
 ---
-title: "Csp"
+title: "CSP (Constraint Satisfaction Problem)"
 date: 2025-07-21T15:34:30-07:00
-tags: []
+tags: [artificial-intelligence]
 featured_image: ""
 description: ""
 math: true
