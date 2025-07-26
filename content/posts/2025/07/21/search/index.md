@@ -39,6 +39,6 @@ math: true
     - greedy: orders by goal proximity / *forward cost* $h(n)$
     - A*: orders by the sum: $f(n) = g(n) + h(n)$
     - admissible heuristics
-      - $\iff 0 \le h(n) \le h^\*(n) \quad $where $h^*(n)$ is the true cost to nearest cost
+      - $\iff 0 \le h(n) \le h^\*(n) \quad $where $h^*(n)$ is the true cost to nearest goal
       - -> make problem simpler
     - consistent heuristics
